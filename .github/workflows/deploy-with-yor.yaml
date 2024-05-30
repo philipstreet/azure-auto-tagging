@@ -33,6 +33,9 @@ jobs:
         # Checkout the repository to the GitHub Actions runner
         - name: Checkout
           uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+            ref: ${{ github.head_ref }}
     
         # Install the latest version of the Terraform CLI
         - name: Setup Terraform
@@ -47,8 +50,8 @@ jobs:
         # Add git metadata to resources using Yor
         - name: Run yor action and commit
           uses: bridgecrewio/yor-action@main
-          # env:
-          #   LOG_LEVEL: DEBUG
+          env:
+            LOG_LEVEL: DEBUG
           # with:
           #   parsers: "Terraform"
 
