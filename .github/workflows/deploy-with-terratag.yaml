@@ -73,7 +73,7 @@ jobs:
         - uses: env0/terratag-action@main
           with:
             tags: |
-              {{ env.$TAGS }}
+              {{ process.env.TAGS }}
             dir: . 
 
         # Generates an execution plan for Terraform
