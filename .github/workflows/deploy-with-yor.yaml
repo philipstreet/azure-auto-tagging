@@ -50,10 +50,11 @@ jobs:
         # Add git metadata to resources using Yor
         - name: Run yor action and commit
           uses: bridgecrewio/yor-action@main
-          env:
-            LOG_LEVEL: DEBUG
+          # env:
+          #   LOG_LEVEL: DEBUG
           with:
             parsers: Terraform
+            commit_changes: false
 
         # Add git metadata to resources using Yor (workaround)
         # - name: Run yor action and commit (workaround)
