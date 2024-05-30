@@ -56,7 +56,7 @@ jobs:
         #     parsers: Terraform
 
         # Add git metadata to resources using Yor (workaround)
-        - name: Run yor action and commit
+        - name: Run yor action and commit (workaround)
           run: yor tag -d . --parsers Terraform            
 
         # Generates an execution plan for Terraform
