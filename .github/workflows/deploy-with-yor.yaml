@@ -58,11 +58,17 @@ jobs:
         # Add git metadata to resources using Yor (workaround)
         - name: Run yor action and commit (workaround)
           run: |
+            # download latest yor release
             curl -s -k https://api.github.com/repos/bridgecrewio/yor/releases/latest | jq '.assets[] | select(.name | contains("linux_386")) | select(.content_type | contains("gzip")) | .browser_download_url' -r | awk '{print "curl -L -k " $0 " -o yor.tar.gz"}' | sh
+            # extract yor
             tar -xf yor.tar.gz -C .
+            # remove yor.tar.gz
             rm yor.tar.gz 
-            #chmod +x /usr/bin/yor 
-            yor --version          
+            # make yor executable 
+            chmod +x yor
+            # show yor version
+            yor --version     
+            # run yor     
             yor tag -d . --parsers Terraform
 
         # Generates an execution plan for Terraform
