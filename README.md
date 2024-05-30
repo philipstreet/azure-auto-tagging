@@ -17,6 +17,20 @@ This will provide proof that the frameworks can handle the three different appro
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.0 |
 | <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | >= 3.0 |
 
+## Providers
+
+| Name | Version |
+|------|---------|
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.105.0 |
+
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_local_storage_account"></a> [local\_storage\_account](#module\_local\_storage\_account) | ./modules/test | n/a |
+| <a name="module_naming"></a> [naming](#module\_naming) | Azure/naming/azurerm | >= 0.4.1 |
+| <a name="module_remote_storage_account"></a> [remote\_storage\_account](#module\_remote\_storage\_account) | Azure/avm-res-storage-storageaccount/azurerm | >= 0.1.1 |
+
 ## Resources
 
 | Name | Type |

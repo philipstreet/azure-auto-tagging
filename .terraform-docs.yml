@@ -6,13 +6,13 @@ footer-from: ""
 sections:
   # hide-all: true
   #hide: []
-  show-all: false
-  show:
-    - header
-    - inputs
-    - outputs
-    - requirements
-    - resources
+  show-all: true
+  # show:
+  #   - header
+  #   - inputs
+  #   - outputs
+  #   - requirements
+  #   - resources
 
 output:
   file: "README.md"
