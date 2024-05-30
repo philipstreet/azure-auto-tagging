@@ -53,19 +53,21 @@ jobs:
           id: git-metadata
           run: |
             # get commit user name
-            export GIT_LAST_COMMIT_USER_NAME=$(git show -s --format=%an 2>&1)
+            GIT_LAST_COMMIT_USER_NAME=$(git show -s --format=%an 2>&1)
             # get commit user email
-            export GIT_LAST_COMMIT_USER_EMAIL=$(git show -s --format=%ae 2>&1)
+            GIT_LAST_COMMIT_USER_EMAIL=$(git show -s --format=%ae 2>&1)
             # get commit datetime
-            export GIT_LAST_COMMIT_DATE=$(git show -s --format=%ci 2>&1)
+            GIT_LAST_COMMIT_DATE=$(git show -s --format=%ci 2>&1)
             # get repo url
-            export GIT_REPO_URL=$(git ls-remote --get-url 2>&1)
+            GIT_REPO_URL=$(git ls-remote --get-url 2>&1)
             # get commit hash
-            export GIT_COMMIT_SHA=${GITHUB_SHA}
+            GIT_COMMIT_SHA=${GITHUB_SHA}
             # get branch name
-            export GIT_BRANCH=${GITHUB_REF#refs/heads/}
+            GIT_BRANCH=${GITHUB_REF#refs/heads/}
+            # set TAGS variable
+            TAGS=$(echo "{\"user_name\":\"$GIT_LAST_COMMIT_USER_NAME\",\"user_email\":\"$GIT_LAST_COMMIT_USER_EMAIL\",\"commit_datetime\":\"$GIT_LAST_COMMIT_DATE\",\"repo_url\":\"$GIT_REPO_URL\",\"commit_hash\":\"$GIT_COMMIT_SHA\"}" | sed 's/ /_/g')
             # export tags to Environment variable
-            echo "export TAGS=$(echo "{\"user_name\":\"$last_commit_user_name\",\"user_email\":\"$last_commit_user_email\",\"commit_datetime\":\"$last_commit_datetime\",\"repo_url\":\"$repo_url\",\"commit_hash\":\"$commit_hash\"}" | sed 's/ /_/g')" >> $GITHUB_ENV
+            echo "TAGS=$TAGS" >> $GITHUB_ENV
 
         # Add git metadata to resources using Terratag
         - uses: env0/terratag-action@main
