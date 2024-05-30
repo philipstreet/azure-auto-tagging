@@ -72,8 +72,7 @@ jobs:
         # Add git metadata to resources using Terratag
         - uses: env0/terratag-action@main
           with:
-            tags: |
-              {{ process.env.TAGS }}
+            tags: ${{ env.TAGS }}
             dir: . 
 
         # Generates an execution plan for Terraform
