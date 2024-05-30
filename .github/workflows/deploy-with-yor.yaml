@@ -52,8 +52,8 @@ jobs:
           uses: bridgecrewio/yor-action@main
           env:
             LOG_LEVEL: DEBUG
-          # with:
-          #   parsers: "Terraform"
+          with:
+            parsers: Terraform
 
 
         # Generates an execution plan for Terraform
