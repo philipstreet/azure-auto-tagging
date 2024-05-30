@@ -1,10 +1,7 @@
 # GitHub workflow to Plan & Deploy Terraform repository to Azure
-name: 'Plan & Deploy auto-tagging using Terratag example to Azure'
+name: 'Plan & Deploy auto-tagging using Yor example to Azure'
 
 on:
-  # push:
-  #   branches:
-  #     - main
   workflow_dispatch: {}
 
 #Special permissions required for OIDC authentication
@@ -31,7 +28,6 @@ jobs:
         defaults:
           run:
             shell: bash
-            #working-directory: 
     
         steps:
         # Checkout the repository to the GitHub Actions runner
@@ -47,12 +43,12 @@ jobs:
         # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
         - name: Terraform Init
           run: terraform init -input=false -no-color -backend-config="./env/backend-gh-yor.hcl"
-
+    
         # Add git metadata to resources using Yor
         - name: Run yor action and commit
           uses: bridgecrewio/yor-action@main
-          env:
-            LOG_LEVEL: DEBUG
+          # env:
+          #   LOG_LEVEL: DEBUG
           with:
             parsers: "terraform"
 
@@ -78,7 +74,7 @@ jobs:
           uses: actions/upload-artifact@v4
           with:
             name: tfplan
-            path: yor/tfplan
+            path: tfplan
     
         # Create string output of Terraform Plan
         - name: Create String Output
@@ -125,7 +121,6 @@ jobs:
         name: 'Terraform Apply'
         if: github.ref == 'refs/heads/main' && needs.terraform-plan.outputs.tfplanExitCode == 2
         runs-on: ubuntu-latest
-        #environment: production
         needs: [terraform-plan]
         defaults:
           run:
@@ -149,7 +144,6 @@ jobs:
           uses: actions/download-artifact@v4
           with:
             name: tfplan
-            path: yor/tfplan
 
         # Terraform Apply
         - name: Terraform Apply
