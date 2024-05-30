@@ -49,9 +49,9 @@ jobs:
           uses: bridgecrewio/yor-action@main
           # env:
           #   LOG_LEVEL: DEBUG
-          with:
-            parsers: "Terraform"
-            
+          # with:
+          #   parsers: "Terraform"
+
 
         # Generates an execution plan for Terraform
         # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
