@@ -98,7 +98,7 @@ jobs:
           uses: actions/upload-artifact@v4
           with:
             name: tfplan
-            path: azure-vwan/tfplan
+            path: terratag/tfplan
     
         # Create string output of Terraform Plan
         - name: Create String Output
@@ -163,14 +163,14 @@ jobs:
 
         # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
         - name: Terraform Init
-          run: terraform init
+          run: terraform init -input=false -no-color -backend-config="./env/backend-gh-terratag.hcl"
 
         # Download saved plan from artifacts
         - name: Download Terraform Plan
           uses: actions/download-artifact@v4
           with:
             name: tfplan
-            path: azure-vwan
+            path: terratag
 
         # Add git metadata to resources
         # - name: Run yor action
