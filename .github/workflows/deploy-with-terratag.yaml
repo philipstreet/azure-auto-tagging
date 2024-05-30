@@ -98,7 +98,7 @@ jobs:
           uses: actions/upload-artifact@v4
           with:
             name: tfplan
-            path: terratag/tfplan
+            path: tfplan
     
         # Create string output of Terraform Plan
         - name: Create String Output
@@ -170,7 +170,7 @@ jobs:
           uses: actions/download-artifact@v4
           with:
             name: tfplan
-            path: terratag
+            #path: terratag
 
         # Add git metadata to resources
         # - name: Run yor action
