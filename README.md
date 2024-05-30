@@ -42,5 +42,5 @@ This will provide proof that the frameworks can handle the three different appro
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_environment"></a> [environment](#input\_environment) | Production Environment. | `string` | n/a | yes |
-| <a name="input_location"></a> [location](#input\_location) | The location/region where the IP Groups will be created. | `string` | n/a | yes |
+| <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resources will be created. | `string` | n/a | yes |
+| <a name="input_location"></a> [location](#input\_location) | The location/region where the resources will be created. | `string` | n/a | yes |
