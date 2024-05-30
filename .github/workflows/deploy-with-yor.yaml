@@ -48,13 +48,16 @@ jobs:
           run: terraform init -input=false -no-color -backend-config="./env/backend-gh-yor.hcl"
     
         # Add git metadata to resources using Yor
-        - name: Run yor action and commit
-          uses: bridgecrewio/yor-action@main
-          env:
-            LOG_LEVEL: DEBUG
-          with:
-            parsers: Terraform
+        # - name: Run yor action and commit
+        #   uses: bridgecrewio/yor-action@main
+        #   env:
+        #     LOG_LEVEL: DEBUG
+        #   with:
+        #     parsers: Terraform
 
+        # Add git metadata to resources using Yor (workaround)
+        - name: Run yor action and commit
+          run: yor tag -d . --parsers Terraform            
 
         # Generates an execution plan for Terraform
         # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
