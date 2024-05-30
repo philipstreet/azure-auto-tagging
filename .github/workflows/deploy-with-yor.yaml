@@ -2,9 +2,9 @@
 name: 'Plan & Deploy auto-tagging using Terratag example to Azure'
 
 on:
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
   workflow_dispatch: {}
 
 #Special permissions required for OIDC authentication
