@@ -1,0 +1,40 @@
+formatter: markdown
+
+header-from: HEADER.md
+footer-from: ""
+
+sections:
+  # hide-all: true
+  #hide: []
+  show-all: false
+  show:
+    - header
+    - inputs
+    - outputs
+    - requirements
+    - resources
+
+output:
+  file: "README.md"
+  mode: replace
+  template: |-
+    {{ .Content }}
+
+output-values:
+  enabled: false
+  from: ""
+
+sort:
+  enabled: true
+  by: required
+
+settings:
+  anchor: true
+  color: true
+  default: true
+  escape: true
+  indent: 2
+  required: true
+  sensitive: true
+  type: true
+  hide-empty: true
