@@ -4,10 +4,10 @@
 # }
 variable "environment" {
   type        = string
-  description = "Production Environment."
+  description = "The environment in which the resources will be created."
 }
 
 variable "location" {
   type        = string
-  description = "The location/region where the IP Groups will be created."
+  description = "The location/region where the resources will be created."
 }
