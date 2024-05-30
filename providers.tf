@@ -11,7 +11,7 @@ terraform {
 // Default subscription
 provider "azurerm" {
   features {}
-  subscription_id     = var.default_subscription_id
+  #subscription_id     = var.default_subscription_id
   use_oidc            = true
   storage_use_azuread = true
 }
