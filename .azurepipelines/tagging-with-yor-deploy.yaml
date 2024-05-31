@@ -1,0 +1,149 @@
+name: lz-development - tagging-with-yor - Deploy
+
+pool: 
+   name: GWLE_Agent_Pool
+
+trigger:
+ - none
+
+variables:
+  - group: Pipeline_run_group
+  - name: tfversion
+    value: "terraform-v1.7.3"
+  - name: subid
+    value: '48ea9c14-d99c-4a50-a4ec-5509ece54ebd'
+
+stages:
+  - stage: Plan
+    jobs:
+      - job: Terraform_plan
+        steps:
+          - checkout: self
+          - task: Bash@3
+            displayName: "Terraform init"
+            inputs:
+              targetType: 'inline'
+              script: |
+                set -e 
+                echo "Terraform init. Version: ${{ variables.tfversion }}" 
+                ${{ variables.tfversion }} init -input=false -backend-config="./backend-yor.hcl"
+
+                ls -al
+              workingDirectory: "$(System.DefaultWorkingDirectory)/tagging"
+            env:
+              ARM_ACCESS_KEY: $(dev-devops-storage-key)
+              ARM_TENANT_ID: $(dev-ARM-TENANT-ID)
+              ARM_CLIENT_ID: $(nw-ARM-CLIENT-ID)
+              ARM_CLIENT_SECRET: $(nw-ARM-CLIENT-SECRET)
+              ARM_SUBSCRIPTION_ID: ${{ variables.subid }}
+              ARM_SKIP_PROVIDER_REGISTRATION: true
+
+          - task: Bash@3
+            displayName: "Add metadata tagging using Yor"
+            inputs:
+              targetType: 'inline'
+              script: |
+                # # download Yor
+                # curl -s -k https://api.github.com/repos/bridgecrewio/yor/releases/latest | jq '.assets[] | select(.name | contains("linux_386")) | select(.content_type | contains("gzip")) | .browser_download_url' -r | awk '{print "curl -L -k " $0 " -o yor.tar.gz"}' | sh
+                # tar -xf yor.tar.gz
+                # chmod +x yor
+                # ./yor --version
+
+                # # run Yor
+                # yor tag --directory tagging --dry-run --parsers Terraform
+                # yor tag --directory tagging --parsers Terraform
+
+                # # show folder contents
+                # ls -al
+
+              workingDirectory: "$(System.DefaultWorkingDirectory)/tagging"
+            env:
+              ARM_ACCESS_KEY: $(dev-devops-storage-key)
+              ARM_TENANT_ID: $(dev-ARM-TENANT-ID)
+              ARM_CLIENT_ID: $(nw-ARM-CLIENT-ID)
+              ARM_CLIENT_SECRET: $(nw-ARM-CLIENT-SECRET)
+              ARM_SUBSCRIPTION_ID: ${{ variables.subid }}
+              ARM_SKIP_PROVIDER_REGISTRATION: true
+              
+          - task: Bash@3
+            displayName: "Terraform plan"
+            inputs:
+              targetType: 'inline'
+              script: |
+                set -e 
+                echo "Execute: TF Plan"
+                ${{ variables.tfversion }} plan -input=false -var-file "./terraform.tfvars" -out='tfplan'
+              workingDirectory: "$(System.DefaultWorkingDirectory)/tagging"
+            env:
+              ARM_ACCESS_KEY: $(dev-devops-storage-key)
+              ARM_TENANT_ID: $(dev-ARM-TENANT-ID)
+              ARM_CLIENT_ID: $(nw-ARM-CLIENT-ID)
+              ARM_CLIENT_SECRET: $(nw-ARM-CLIENT-SECRET)
+              ARM_SUBSCRIPTION_ID: ${{ variables.subid }}
+              ARM_SKIP_PROVIDER_REGISTRATION: true
+
+          - task: ArchiveFiles@2
+            inputs:
+              rootFolderOrFile: '$(Build.SourcesDirectory)'
+              includeRootFolder: false
+              archiveType: 'tar'
+              tarCompression: 'gz'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).tgz'
+              replaceExistingArchive: true
+              displayName: 'Create Plan Artifact'
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: '$(Build.BuildId)-tfplan'
+              publishLocation: 'Container'
+              displayName: 'Publish Plan Artifact'
+  
+  - stage: Deploy
+    dependsOn: [ 'Plan' ]
+    jobs:
+    - deployment: Terraform_Deploy
+      environment: 'landing-zone-dev'
+      continueOnError: false
+      timeoutInMinutes: 600
+      strategy:
+       runOnce:
+        deploy:
+          steps:
+            - checkout: none
+
+            - task: DownloadBuildArtifacts@0
+              inputs:
+                artifactName: '$(Build.BuildId)-tfplan'
+                displayName: 'Download Plan Artifact'
+
+            - task: ExtractFiles@1
+              inputs:
+                archiveFilePatterns: '$(System.ArtifactsDirectory)/$(Build.BuildId)-tfplan/$(Build.BuildId).tgz'
+                destinationFolder: "$(System.DefaultWorkingDirectory)/tagging"
+                cleanDestinationFolder: false
+                overwriteExistingFiles: true
+                displayName: 'Extract Terraform Plan Artifact'
+            
+            - task: Bash@3
+              displayName: "Terraform apply"
+              inputs:
+                targetType: 'inline'
+                script: |
+                  set -e
+                  echo "Terraform apply. Version: ${{ variables.tfversion }}"
+
+                  echo "Execute: TF Init"
+                  ${{ variables.tfversion }} init -input=false
+
+                  echo "Execute: TF Apply"
+                  ${{ variables.tfversion }} apply -auto-approve -input=false tfplan
+                workingDirectory: "$(System.DefaultWorkingDirectory)/tagging"
+              env:
+                ARM_ACCESS_KEY: $(dev-devops-storage-key)
+                ARM_TENANT_ID: $(dev-ARM-TENANT-ID)
+                ARM_CLIENT_ID: $(nw-ARM-CLIENT-ID)
+                ARM_CLIENT_SECRET: $(nw-ARM-CLIENT-SECRET)
+                ARM_SUBSCRIPTION_ID: ${{ variables.subid }}
+                ARM_SKIP_PROVIDER_REGISTRATION: true
+                

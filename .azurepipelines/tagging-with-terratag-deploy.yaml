@@ -1,0 +1,172 @@
+name: lz-development - tagging-with-terratag - Deploy
+
+pool: 
+   name: GWLE_Agent_Pool
+
+trigger:
+ - none
+
+variables:
+  - group: Pipeline_run_group
+  - name: tfversion
+    value: "terraform-v1.7.3"
+  - name: subid
+    value: '48ea9c14-d99c-4a50-a4ec-5509ece54ebd'
+
+stages:
+  - stage: Plan
+    jobs:
+      - job: Terraform_plan
+        steps:
+          - checkout: self
+          - task: Bash@3
+            displayName: "Terraform init"
+            inputs:
+              targetType: 'inline'
+              script: |
+                set -e 
+                echo "Terraform init. Version: ${{ variables.tfversion }}" 
+                ${{ variables.tfversion }} init -input=false -backend-config="./backend-terratag.hcl"
+
+              workingDirectory: "$(System.DefaultWorkingDirectory)"
+            env:
+              ARM_ACCESS_KEY: $(dev-devops-storage-key)
+              ARM_TENANT_ID: $(dev-ARM-TENANT-ID)
+              ARM_CLIENT_ID: $(nw-ARM-CLIENT-ID)
+              ARM_CLIENT_SECRET: $(nw-ARM-CLIENT-SECRET)
+              ARM_SUBSCRIPTION_ID: ${{ variables.subid }}
+              ARM_SKIP_PROVIDER_REGISTRATION: true
+
+          - task: Bash@3
+            displayName: "Add metadata tagging using Terratag"
+            inputs:
+              targetType: 'inline'
+              script: |
+                # Get latest release number from https://github.com/env0/terratag/releases/download/
+                api_url="https://api.github.com/repos/env0/terratag/releases/latest"
+                response=$(curl --silent $api_url)
+                # Get the latest version
+                latest_version=$(echo $response | jq -r '.tag_name')
+                # Remove the 'v' from the version
+                latest_version_without_v=$(echo $latest_version | sed 's/v//g')
+                # Get the tar url
+                tar_url="https://github.com/env0/terratag/releases/download/${latest_version}/terratag_${latest_version_without_v}_linux_amd64.tar.gz"
+                # Get the tar file name
+                tar="terratag_${latest_version_without_v}_linux_amd64.tar.gz"
+
+                # Download Terratag
+                curl -O -L $tar_url 
+                tar -xvf $tar 
+
+                # get commit user name
+                export last_commit_user_name=$(git show -s --format=%an 2>&1)
+                # get commit user email
+                export last_commit_user_email=$(git show -s --format=%ae 2>&1)
+                # get commit datetime
+                export last_commit_datetime=$(git show -s --format=%ci 2>&1)
+                # get repo url
+                export repo_url=$(git ls-remote --get-url 2>&1)
+                # get commit hash
+                export commit_hash=$(git rev-parse HEAD 2>&1)
+                # get branch name
+                export branch_name=$(git rev-parse --abbrev-ref HEAD 2>&1)
+                # create tags
+                export tags=$(echo "{\"git_branch_name\":\"$branch_name\",\"git_user_name\":\"$last_commit_user_name\",\"git_user_email\":\"$last_commit_user_email\",\"git_commit_datetime\":\"$last_commit_datetime\",\"git_repo_url\":\"$repo_url\",\"git_commit_hash\":\"$commit_hash\"}" | sed 's/ /_/g')
+
+                # apply Terratag tags
+                ./terratag -tags=$tags
+
+                # show folder contents
+                ls -al
+
+              workingDirectory: "$(System.DefaultWorkingDirectory)/tagging"
+            env:
+              ARM_ACCESS_KEY: $(dev-devops-storage-key)
+              ARM_TENANT_ID: $(dev-ARM-TENANT-ID)
+              ARM_CLIENT_ID: $(nw-ARM-CLIENT-ID)
+              ARM_CLIENT_SECRET: $(nw-ARM-CLIENT-SECRET)
+              ARM_SUBSCRIPTION_ID: ${{ variables.subid }}
+              ARM_SKIP_PROVIDER_REGISTRATION: true
+              
+          - task: Bash@3
+            displayName: "Terraform plan"
+            inputs:
+              targetType: 'inline'
+              script: |
+                set -e 
+                echo "Execute: TF Plan"
+                ${{ variables.tfversion }} plan -input=false -var-file "./terraform.tfvars" -out='tfplan'
+              workingDirectory: "$(System.DefaultWorkingDirectory)/tagging"
+            env:
+              ARM_ACCESS_KEY: $(dev-devops-storage-key)
+              ARM_TENANT_ID: $(dev-ARM-TENANT-ID)
+              ARM_CLIENT_ID: $(nw-ARM-CLIENT-ID)
+              ARM_CLIENT_SECRET: $(nw-ARM-CLIENT-SECRET)
+              ARM_SUBSCRIPTION_ID: ${{ variables.subid }}
+              ARM_SKIP_PROVIDER_REGISTRATION: true
+
+          - task: ArchiveFiles@2
+            inputs:
+              rootFolderOrFile: '$(Build.SourcesDirectory)'
+              includeRootFolder: false
+              archiveType: 'tar'
+              tarCompression: 'gz'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).tgz'
+              replaceExistingArchive: true
+              displayName: 'Create Plan Artifact'
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: '$(Build.BuildId)-tfplan'
+              publishLocation: 'Container'
+              displayName: 'Publish Plan Artifact'
+  
+  - stage: Deploy
+    dependsOn: [ 'Plan' ]
+    jobs:
+    - deployment: Terraform_Deploy
+      environment: 'landing-zone-dev'
+      continueOnError: false
+      timeoutInMinutes: 600
+      strategy:
+       runOnce:
+        deploy:
+          steps:
+            - checkout: none
+
+            - task: DownloadBuildArtifacts@0
+              inputs:
+                artifactName: '$(Build.BuildId)-tfplan'
+                displayName: 'Download Plan Artifact'
+
+            - task: ExtractFiles@1
+              inputs:
+                archiveFilePatterns: '$(System.ArtifactsDirectory)/$(Build.BuildId)-tfplan/$(Build.BuildId).tgz'
+                destinationFolder: "$(System.DefaultWorkingDirectory)/tagging"
+                cleanDestinationFolder: false
+                overwriteExistingFiles: true
+                displayName: 'Extract Terraform Plan Artifact'
+            
+            - task: Bash@3
+              displayName: "Terraform apply"
+              inputs:
+                targetType: 'inline'
+                script: |
+                  set -e
+                  echo "Terraform apply. Version: ${{ variables.tfversion }}"
+
+                  echo "Execute: TF Init"
+                  ${{ variables.tfversion }} init -input=false
+
+                  echo "Execute: TF Apply"
+                  ${{ variables.tfversion }} apply -auto-approve -input=false tfplan
+                workingDirectory: "$(System.DefaultWorkingDirectory)/tagging"
+              env:
+                ARM_ACCESS_KEY: $(dev-devops-storage-key)
+                ARM_TENANT_ID: $(dev-ARM-TENANT-ID)
+                ARM_CLIENT_ID: $(nw-ARM-CLIENT-ID)
+                ARM_CLIENT_SECRET: $(nw-ARM-CLIENT-SECRET)
+                ARM_SUBSCRIPTION_ID: ${{ variables.subid }}
+                ARM_SKIP_PROVIDER_REGISTRATION: true
+                
