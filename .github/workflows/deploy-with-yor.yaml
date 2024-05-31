@@ -45,7 +45,15 @@ jobs:
     
         # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
         - name: Terraform Init
-          run: terraform init -input=false -no-color -backend-config="./env/backend-gh-yor.hcl"
+          run: |
+            terraform init -input=false -no-color \
+              -backend-config="resource_group_name=${{ secrets.AZURE_RG_NAME }}" \
+              -backend-config="storage_account_name=${{ secrets.AZURE_SA_NAME }}" \
+              -backend-config="container_name=tfstate" \
+              -backend-config="key=azure-auto-tagging-with-yor.gh.tfstate" \
+              -backend-config="use_oidc=true"
+            
+            #terraform init -input=false -no-color -backend-config="./env/backend-gh-yor.hcl"
     
         # Add git metadata to resources using Yor
         - name: Run yor action and commit
@@ -139,7 +147,15 @@ jobs:
 
         # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
         - name: Terraform Init
-          run: terraform init -input=false -no-color -backend-config="./env/backend-gh-yor.hcl"
+          run: |
+            terraform init -input=false -no-color \
+              -backend-config="resource_group_name=${{ secrets.AZURE_RG_NAME }}" \
+              -backend-config="storage_account_name=${{ secrets.AZURE_SA_NAME }}" \
+              -backend-config="container_name=tfstate" \
+              -backend-config="key=azure-auto-tagging-with-yor.gh.tfstate" \
+              -backend-config="use_oidc=true"
+            
+            #terraform init -input=false -no-color -backend-config="./env/backend-gh-yor.hcl"
 
         # Download saved plan from artifacts
         - name: Download Terraform Plan
