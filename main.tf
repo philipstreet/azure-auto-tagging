@@ -40,5 +40,6 @@ module "remote_storage_account" {
   public_network_access_enabled = true
   shared_access_key_enabled     = true
   account_replication_type      = "LRS"
+  network_rules                 = null
   tags                          = local.tags
 }
