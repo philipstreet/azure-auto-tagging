@@ -84,6 +84,7 @@ stages:
               command: 'plan'
               commandOptions: '-input=false -var-file "./terraform.tfvars" -out=tfplan'
               workingDirectory: '$(System.DefaultWorkingDirectory)'
+              backendServiceArm: '$(AZURE_SVC_NAME)'
               environmentServiceNameAzureRM: 'svcDev'
 
           - task: ArchiveFiles@2
