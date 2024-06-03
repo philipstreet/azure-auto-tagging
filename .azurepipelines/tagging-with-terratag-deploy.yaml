@@ -16,7 +16,7 @@ stages:
         steps:
           - checkout: self
 
-          - task: TerraformTask@V4
+          - task: TerraformTaskV4@4
             name: 'terraformInit'
             inputs:
               provider: 'azurerm'
@@ -71,7 +71,7 @@ stages:
                 # show folder contents
                 ls -al
               
-          - task: TerraformTask@V4
+          - task: TerraformTaskV4@4
             name: 'terraformPlan'
             inputs:
               provider: 'azurerm'
@@ -123,7 +123,7 @@ stages:
                 overwriteExistingFiles: true
                 displayName: 'Extract Terraform Plan Artifact'
             
-            - task: TerraformTask@V4
+            - task: TerraformTaskV4@4
               name: 'terraformApply'
               inputs:
                 provider: 'azurerm'
