@@ -63,8 +63,6 @@ jobs:
               -backend-config="key=azure-auto-tagging-with-yor.gh.tfstate" \
               -backend-config="use_oidc=true"
             
-            #terraform init -input=false -no-color -backend-config="./env/backend-gh-yor.hcl"
-    
         # Add git metadata to resources using Yor
         - name: Run yor action and commit
           uses: bridgecrewio/yor-action@main
@@ -165,8 +163,6 @@ jobs:
               -backend-config="container_name=tfstate" \
               -backend-config="key=azure-auto-tagging-with-yor.gh.tfstate" \
               -backend-config="use_oidc=true"
-            
-            #terraform init -input=false -no-color -backend-config="./env/backend-gh-yor.hcl"
 
         # Download saved plan from artifacts
         - name: Download Terraform Plan
