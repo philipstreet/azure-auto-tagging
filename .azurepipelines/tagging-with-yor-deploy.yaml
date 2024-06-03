@@ -16,40 +16,23 @@ stages:
         steps:
           - checkout: self
 
-          - task: Bash@3
-            displayName: "Az Login"
+          - task: TerraformTask@V4
+            name: 'terraformInit'
             inputs:
-              targetType: 'inline'
-              script: |
-                set -e
-                az login --service-principal -u $(AZURE_CLIENT_ID) -p $(AZURE_CLIENT_SECRET) --tenant $(AZURE_TENANT_ID)
-              workingDirectory: "$(System.DefaultWorkingDirectory)"
-
-          - task: Bash@3
-            displayName: "Terraform init"
-            inputs:
-              targetType: 'inline'
-              script: |
-                set -e 
-                terraform init -input=false -no-color \
-                  -backend-config="resource_group_name=$(AZURE_RESOURCE_GROUP_NAME)" \
-                  -backend-config="storage_account_name=$(AZURE_STORAGE_ACCOUNT_NAME)" \
-                  -backend-config="container_name=tfstate" \
-                  -backend-config="key=azure-auto-tagging-with-terratag.ado.tfstate" \
-                  -backend-config="use_oidc=true"
-
-              workingDirectory: "$(System.DefaultWorkingDirectory)"
-            env:
-              # get values from the variable group 
-              ARM_TENANT_ID: $(AZURE_TENANT_ID)
-              ARM_CLIENT_ID: $(AZURE_CLIENT_ID)
-              ARM_SUBSCRIPTION_ID: $(AZURE_SUB_ID)
-              ARM_SKIP_PROVIDER_REGISTRATION: true
+              provider: 'azurerm'
+              command: 'init'
+              backendServiceArm: '$(AZURE_SVC_NAME)'
+              backendAzureRmResourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+              backendAzureRmStorageAccountName: '$(AZURE_STORAGE_ACCOUNT_NAME)'
+              backendAzureRmContainerName: 'tfstate'
+              backendAzureRmKey: 'azure-auto-tagging-with-terratag.ado.tfstate'
+              workingDirectory: '$(System.DefaultWorkingDirectory)'
 
           - task: Bash@3
             displayName: "Add metadata tagging using Yor"
             inputs:
               targetType: 'inline'
+              workingDirectory: "$(System.DefaultWorkingDirectory)"
               script: |
                 # download Yor
                 curl -s -k https://api.github.com/repos/bridgecrewio/yor/releases/latest | jq '.assets[] | select(.name | contains("linux_386")) | select(.content_type | contains("gzip")) | .browser_download_url' -r | awk '{print "curl -L -k " $0 " -o yor.tar.gz"}' | sh
@@ -64,29 +47,14 @@ stages:
                 # show folder contents
                 ls -al
 
-              workingDirectory: "$(System.DefaultWorkingDirectory)"
-            env:
-              # get values from the variable group 
-              ARM_TENANT_ID: $(AZURE_TENANT_ID)
-              ARM_CLIENT_ID: $(AZURE_CLIENT_ID)
-              ARM_SUBSCRIPTION_ID: $(AZURE_SUB_ID)
-              ARM_SKIP_PROVIDER_REGISTRATION: true
-              
-          - task: Bash@3
-            displayName: "Terraform plan"
+          - task: TerraformTask@V4
+            name: 'terraformPlan'
             inputs:
-              targetType: 'inline'
-              script: |
-                set -e 
-                echo "Execute: TF Plan"
-                terraform plan -input=false -var-file "./terraform.tfvars" -out='tfplan'
-              workingDirectory: "$(System.DefaultWorkingDirectory)"
-            env:
-              # get values from the variable group 
-              ARM_TENANT_ID: $(AZURE_TENANT_ID)
-              ARM_CLIENT_ID: $(AZURE_CLIENT_ID)
-              ARM_SUBSCRIPTION_ID: $(AZURE_SUB_ID)
-              ARM_SKIP_PROVIDER_REGISTRATION: true
+              provider: 'azurerm'
+              command: 'plan'
+              commandOptions: '-input=false -var-file "./terraform.tfvars" -out=tfplan'
+              workingDirectory: '$(System.DefaultWorkingDirectory)'
+              environmentServiceNameAzureRM: 'svcDev'
 
           - task: ArchiveFiles@2
             inputs:
@@ -130,22 +98,12 @@ stages:
                 cleanDestinationFolder: false
                 overwriteExistingFiles: true
                 displayName: 'Extract Terraform Plan Artifact'
-            
-            - task: Bash@3
-              displayName: "Terraform apply"
-              inputs:
-                targetType: 'inline'
-                script: |
-                  set -e
-                  echo "Execute: TF Init"
-                  terraform init -input=false
-
-                  echo "Execute: TF Apply"
-                  terraform apply -auto-approve -input=false tfplan
-                workingDirectory: "$(System.DefaultWorkingDirectory)"
-              env:
-                ARM_TENANT_ID: $(AZURE_TENANT_ID)
-                ARM_CLIENT_ID: $(AZURE_CLIENT_ID)
-                ARM_SUBSCRIPTION_ID: $(AZURE_SUB_ID)
-                ARM_SKIP_PROVIDER_REGISTRATION: true
                 
+              - task: TerraformTask@V4
+                name: 'terraformApply'
+                inputs:
+                  provider: 'azurerm'
+                  command: 'apply'
+                  commandOptions: '-auto-approve -input=false -tfplan tfplan'
+                  workingDirectory: '$(System.DefaultWorkingDirectory)'
+                  environmentServiceNameAzureRM: 'svcDev'
