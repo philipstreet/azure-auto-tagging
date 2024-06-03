@@ -28,54 +28,54 @@ stages:
               backendAzureRmKey: 'azure-auto-tagging-with-terratag.ado.tfstate'
               workingDirectory: '$(System.DefaultWorkingDirectory)'
 
-          # - task: TerraformTaskV4@4
-          #   displayName: 'Validate Terraform'
-          #   inputs:
-          #     provider: 'azurerm'
-          #     command: 'validate'   
+          - task: TerraformTaskV4@4
+            displayName: 'Validate Terraform'
+            inputs:
+              provider: 'azurerm'
+              command: 'validate'   
 
-          # - task: Bash@3
-          #   displayName: "Add metadata tagging using Terratag"
-          #   inputs:
-          #     targetType: 'inline'
-          #     workingDirectory: "$(System.DefaultWorkingDirectory)"
-          #     script: |
-          #       # Get latest release number from https://github.com/env0/terratag/releases/download/
-          #       api_url="https://api.github.com/repos/env0/terratag/releases/latest"
-          #       response=$(curl --silent $api_url)
-          #       # Get the latest version
-          #       latest_version=$(echo $response | jq -r '.tag_name')
-          #       # Remove the 'v' from the version
-          #       latest_version_without_v=$(echo $latest_version | sed 's/v//g')
-          #       # Get the tar url
-          #       tar_url="https://github.com/env0/terratag/releases/download/${latest_version}/terratag_${latest_version_without_v}_linux_amd64.tar.gz"
-          #       # Get the tar file name
-          #       tar="terratag_${latest_version_without_v}_linux_amd64.tar.gz"
+          - task: Bash@3
+            displayName: "Add metadata tagging using Terratag"
+            inputs:
+              targetType: 'inline'
+              workingDirectory: "$(System.DefaultWorkingDirectory)"
+              script: |
+                # Get latest release number from https://github.com/env0/terratag/releases/download/
+                api_url="https://api.github.com/repos/env0/terratag/releases/latest"
+                response=$(curl --silent $api_url)
+                # Get the latest version
+                latest_version=$(echo $response | jq -r '.tag_name')
+                # Remove the 'v' from the version
+                latest_version_without_v=$(echo $latest_version | sed 's/v//g')
+                # Get the tar url
+                tar_url="https://github.com/env0/terratag/releases/download/${latest_version}/terratag_${latest_version_without_v}_linux_amd64.tar.gz"
+                # Get the tar file name
+                tar="terratag_${latest_version_without_v}_linux_amd64.tar.gz"
 
-          #       # Download Terratag
-          #       curl -O -L $tar_url 
-          #       tar -xvf $tar 
+                # Download Terratag
+                curl -O -L $tar_url 
+                tar -xvf $tar 
 
-          #       # get commit user name
-          #       export last_commit_user_name=$(git show -s --format=%an 2>&1)
-          #       # get commit user email
-          #       export last_commit_user_email=$(git show -s --format=%ae 2>&1)
-          #       # get commit datetime
-          #       export last_commit_datetime=$(git show -s --format=%ci 2>&1)
-          #       # get repo url
-          #       export repo_url=$(git ls-remote --get-url 2>&1)
-          #       # get commit hash
-          #       export commit_hash=$(git rev-parse HEAD 2>&1)
-          #       # get branch name
-          #       export branch_name=$(git rev-parse --abbrev-ref HEAD 2>&1)
-          #       # create tags
-          #       export tags=$(echo "{\"git_branch_name\":\"$branch_name\",\"git_user_name\":\"$last_commit_user_name\",\"git_user_email\":\"$last_commit_user_email\",\"git_commit_datetime\":\"$last_commit_datetime\",\"git_repo_url\":\"$repo_url\",\"git_commit_hash\":\"$commit_hash\"}" | sed 's/ /_/g')
+                # get commit user name
+                export last_commit_user_name=$(git show -s --format=%an 2>&1)
+                # get commit user email
+                export last_commit_user_email=$(git show -s --format=%ae 2>&1)
+                # get commit datetime
+                export last_commit_datetime=$(git show -s --format=%ci 2>&1)
+                # get repo url
+                export repo_url=$(git ls-remote --get-url 2>&1)
+                # get commit hash
+                export commit_hash=$(git rev-parse HEAD 2>&1)
+                # get branch name
+                export branch_name=$(git rev-parse --abbrev-ref HEAD 2>&1)
+                # create tags
+                export tags=$(echo "{\"git_branch_name\":\"$branch_name\",\"git_user_name\":\"$last_commit_user_name\",\"git_user_email\":\"$last_commit_user_email\",\"git_commit_datetime\":\"$last_commit_datetime\",\"git_repo_url\":\"$repo_url\",\"git_commit_hash\":\"$commit_hash\"}" | sed 's/ /_/g')
 
-          #       # apply Terratag tags
-          #       ./terratag -tags=$tags
+                # apply Terratag tags
+                ./terratag -tags=$tags
 
-          #       # show folder contents
-          #       ls -al
+                # show folder contents
+                ls -al
               
           - task: TerraformTaskV4@4
             name: 'terraformPlan'
@@ -84,11 +84,6 @@ stages:
               command: 'plan'
               commandOptions: '-input=false -var-file "./terraform.tfvars" -out=tfplan'
               workingDirectory: '$(System.DefaultWorkingDirectory)'
-              backendServiceArm: '$(AZURE_SVC_NAME)'
-              backendAzureRmResourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
-              backendAzureRmStorageAccountName: '$(AZURE_STORAGE_ACCOUNT_NAME)'
-              backendAzureRmContainerName: 'tfstate'
-              backendAzureRmKey: 'azure-auto-tagging-with-terratag.ado.tfstate'
               environmentServiceNameAzureRM: 'svcDev'
 
           - task: ArchiveFiles@2
