@@ -82,7 +82,7 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'plan'
-              commandOptions: '-input=false -var-file "./terraform.tfvars" -out=tfplan -auto-approve'
+              commandOptions: '-input=false -var-file "./terraform.tfvars" -out=tfplan'
               workingDirectory: '$(System.DefaultWorkingDirectory)'
               environmentServiceNameAzureRM: 'svcDev'
 
