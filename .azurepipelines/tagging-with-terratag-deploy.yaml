@@ -16,15 +16,6 @@ stages:
         steps:
           - checkout: self
 
-          - task: Bash@3
-            displayName: "Az Login"
-            inputs:
-              targetType: 'inline'
-              script: |
-                set -e
-                az login --service-principal -u $(AZURE_CLIENT_ID) -p $(AZURE_CLIENT_SECRET) --tenant $(AZURE_TENANT_ID)
-              workingDirectory: "$(System.DefaultWorkingDirectory)"
-
           - task: TerraformTask@V4
             name: 'terraformInit'
             inputs:
