@@ -123,11 +123,11 @@ stages:
                 overwriteExistingFiles: true
                 displayName: 'Extract Terraform Plan Artifact'
             
-              - task: TerraformTask@V4
-                name: 'terraformApply'
-                inputs:
-                  provider: 'azurerm'
-                  command: 'apply'
-                  commandOptions: '-auto-approve -input=false -tfplan tfplan'
-                  workingDirectory: '$(System.DefaultWorkingDirectory)'
-                  environmentServiceNameAzureRM: 'svcDev'
+            - task: TerraformTask@V4
+              name: 'terraformApply'
+              inputs:
+                provider: 'azurerm'
+                command: 'apply'
+                commandOptions: '-auto-approve -input=false -tfplan tfplan'
+                workingDirectory: '$(System.DefaultWorkingDirectory)'
+                environmentServiceNameAzureRM: 'svcDev'
