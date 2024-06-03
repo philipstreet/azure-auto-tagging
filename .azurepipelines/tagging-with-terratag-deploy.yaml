@@ -84,6 +84,11 @@ stages:
               command: 'plan'
               commandOptions: '-input=false -var-file "./terraform.tfvars" -out=tfplan'
               workingDirectory: '$(System.DefaultWorkingDirectory)'
+              backendServiceArm: '$(AZURE_SVC_NAME)'
+              backendAzureRmResourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+              backendAzureRmStorageAccountName: '$(AZURE_STORAGE_ACCOUNT_NAME)'
+              backendAzureRmContainerName: 'tfstate'
+              backendAzureRmKey: 'azure-auto-tagging-with-terratag.ado.tfstate'
               environmentServiceNameAzureRM: 'svcDev'
 
           - task: ArchiveFiles@2
