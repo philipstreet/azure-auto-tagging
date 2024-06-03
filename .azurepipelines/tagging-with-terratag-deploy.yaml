@@ -123,6 +123,7 @@ stages:
     dependsOn: [ 'Plan' ]
     jobs:
     - deployment: Terraform_Deploy
+      environment: 'development'
       continueOnError: false
       timeoutInMinutes: 600
       strategy:
