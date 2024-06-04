@@ -14,7 +14,7 @@ stages:
     jobs:
       - job: Terraform_plan
         steps:
-          - checkout: self
+          #- checkout: self
 
           - task: TerraformTaskV4@4
             name: 'Terraform_Init'
@@ -29,7 +29,7 @@ stages:
               workingDirectory: '$(System.DefaultWorkingDirectory)'
             env:
               ARM_USE_AZUREAD: true
-              ARM_USE_OIDC: true
+              #ARM_USE_OIDC: true
 
           - task: TerraformTaskV4@4
             displayName: 'Terraform_Validate'
@@ -75,10 +75,10 @@ stages:
                 export tags=$(echo "{\"git_branch_name\":\"$branch_name\",\"git_user_name\":\"$last_commit_user_name\",\"git_user_email\":\"$last_commit_user_email\",\"git_commit_datetime\":\"$last_commit_datetime\",\"git_repo_url\":\"$repo_url\",\"git_commit_hash\":\"$commit_hash\"}" | sed 's/ /_/g')
 
                 # run terraform providers
-                # terraform providers schema -json
+                terraform providers schema -json
 
                 # apply Terratag tags
-                ./terratag -tags=$tags
+                #./terratag -tags=$tags
 
                 # show folder contents
                 ls -al
@@ -98,7 +98,7 @@ stages:
               environmentServiceNameAzureRM: '$(AZURE_SVC_NAME)'
             env:
               ARM_USE_AZUREAD: true
-              ARM_USE_OIDC: true
+              #ARM_USE_OIDC: true
 
           - task: ArchiveFiles@2
             inputs:
@@ -153,4 +153,4 @@ stages:
                 environmentServiceNameAzureRM: '$(AZURE_SVC_NAME)'
               env:
                 ARM_USE_AZUREAD: true
-                ARM_USE_OIDC: true
+                #ARM_USE_OIDC: true
