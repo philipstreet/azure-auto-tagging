@@ -17,7 +17,7 @@ stages:
           - checkout: self
 
           - task: TerraformTaskV4@4
-            name: 'Terraform Init'
+            name: 'Terraform_Init'
             inputs:
               provider: 'azurerm'
               command: 'init'
@@ -31,7 +31,7 @@ stages:
               ARM_USE_AZUREAD: true
 
           - task: TerraformTaskV4@4
-            displayName: 'Terraform Validate'
+            displayName: 'Terraform_Validate'
             inputs:
               provider: 'azurerm'
               command: 'validate'   
@@ -87,7 +87,7 @@ stages:
               ARM_USE_AZUREAD: true
 
           - task: TerraformTaskV4@4
-            name: 'Terraform Plan'
+            name: 'Terraform_Plan'
             inputs:
               provider: 'azurerm'
               command: 'plan'
@@ -141,7 +141,7 @@ stages:
                 displayName: 'Extract Terraform Plan Artifact'
             
             - task: TerraformTaskV4@4
-              name: 'Terraform Apply'
+              name: 'Terraform_Apply'
               inputs:
                 provider: 'azurerm'
                 command: 'apply'
