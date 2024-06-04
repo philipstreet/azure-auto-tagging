@@ -26,15 +26,21 @@ stages:
                 -backend-config="resource_group_name=$(AZURE_RESOURCE_GROUP_NAME)" \
                 -backend-config="storage_account_name=$(AZURE_STORAGE_ACCOUNT_NAME)" \
                 -backend-config="container_name=tfstate" \
-                -backend-config="key=azure-auto-tagging-with-terratag.ado.tfstate"
+                -backend-config="key=azure-auto-tagging-with-terratag.ado.tfstate" \
+                -backend-config="tenant_id=$(AZURE_TENANT_ID)" \
+                -backend-config="subscription_id=$(AZURE_SUBSCRIPTION_ID)" \
+                -backend-config="client_id=$(AZURE_CLIENT_ID)" \
+                -backend-config="use_oidc=true" \
+                -backend-config="use_azuread=true" \
+                -backend-config="skip_provider_registration=true"
               workingDirectory: '$(System.DefaultWorkingDirectory)'
-            env:
-              ARM_TENANT_ID: $(AZURE_TENANT_ID)
-              ARM_CLIENT_ID: $(AZURE_CLIENT_ID)
-              ARM_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
-              ARM_USE_AZUREAD: true
-              ARM_USE_OIDC: true
-              ARM_SKIP_PROVIDER_REGISTRATION: true
+            # env:
+            #   ARM_TENANT_ID: $(AZURE_TENANT_ID)
+            #   ARM_CLIENT_ID: $(AZURE_CLIENT_ID)
+            #   ARM_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
+            #   ARM_USE_AZUREAD: true
+            #   ARM_USE_OIDC: true
+            #   ARM_SKIP_PROVIDER_REGISTRATION: true
 
           # Add metadata tagging using Terratag
           - task: Bash@3
