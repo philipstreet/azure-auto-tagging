@@ -17,7 +17,7 @@ stages:
           - checkout: self
 
           - task: TerraformTaskV4@4
-            name: 'terraformInit'
+            name: 'Terraform Init'
             inputs:
               provider: 'azurerm'
               command: 'init'
@@ -27,9 +27,11 @@ stages:
               backendAzureRmContainerName: 'tfstate'
               backendAzureRmKey: 'azure-auto-tagging-with-terratag.ado.tfstate'
               workingDirectory: '$(System.DefaultWorkingDirectory)'
+            env:
+              ARM_USE_AZUREAD: true
 
           - task: TerraformTaskV4@4
-            displayName: 'Validate Terraform'
+            displayName: 'Terraform Validate'
             inputs:
               provider: 'azurerm'
               command: 'validate'   
@@ -71,20 +73,29 @@ stages:
                 # create tags
                 export tags=$(echo "{\"git_branch_name\":\"$branch_name\",\"git_user_name\":\"$last_commit_user_name\",\"git_user_email\":\"$last_commit_user_email\",\"git_commit_datetime\":\"$last_commit_datetime\",\"git_repo_url\":\"$repo_url\",\"git_commit_hash\":\"$commit_hash\"}" | sed 's/ /_/g')
 
+                # run terraform providers
+                # terraform providers schema -json
+
                 # apply Terratag tags
                 ./terratag -tags=$tags
 
                 # show folder contents
                 ls -al
-              
+              env:
+                ARM_ACCESS_KEY: 'azure-auto-tagging-with-terratag.ado.tfstate'
+                ARM_TENANT_ID: $(AZURE_TENANT_ID)
+                ARM_USE_AZUREAD: true
+
           - task: TerraformTaskV4@4
-            name: 'terraformPlan'
+            name: 'Terraform Plan'
             inputs:
               provider: 'azurerm'
               command: 'plan'
               commandOptions: '-input=false -var-file "./terraform.tfvars" -out=tfplan -var="default_subscription_id=$(SUBSCRIPTION_ID)"'
               workingDirectory: '$(System.DefaultWorkingDirectory)'
               environmentServiceNameAzureRM: '$(AZURE_SVC_NAME)'
+            env:
+              ARM_USE_AZUREAD: true
 
           - task: ArchiveFiles@2
             inputs:
@@ -130,10 +141,12 @@ stages:
                 displayName: 'Extract Terraform Plan Artifact'
             
             - task: TerraformTaskV4@4
-              name: 'terraformApply'
+              name: 'Terraform Apply'
               inputs:
                 provider: 'azurerm'
                 command: 'apply'
                 commandOptions: '-auto-approve -input=false -tfplan tfplan -var="default_subscription_id=$(SUBSCRIPTION_ID)"'
                 workingDirectory: '$(System.DefaultWorkingDirectory)'
                 environmentServiceNameAzureRM: '$(AZURE_SVC_NAME)'
+              env:
+                ARM_USE_AZUREAD: true
