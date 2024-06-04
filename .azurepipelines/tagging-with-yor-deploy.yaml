@@ -1,4 +1,4 @@
-name: lz-development - tagging-with-yor - Deploy
+name: dev - tagging-with-yor - Deploy
 
 pool: 
   vmImage: 'ubuntu-latest'

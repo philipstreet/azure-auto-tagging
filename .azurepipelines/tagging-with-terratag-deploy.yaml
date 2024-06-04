@@ -1,4 +1,4 @@
-name: lz-development - tagging-with-terratag - Deploy
+name: dev - tagging-with-terratag - Deploy
 
 pool: 
   vmImage: 'ubuntu-latest'
