@@ -82,7 +82,7 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'plan'
-              commandOptions: '-input=false -var-file "./terraform.tfvars" -out=tfplan'
+              commandOptions: '-input=false -var-file "./terraform.tfvars" -out=tfplan -var="default_subscription_id=$(SUBSCRIPTION_ID)"'
               workingDirectory: '$(System.DefaultWorkingDirectory)'
               environmentServiceNameAzureRM: '$(AZURE_SVC_NAME)'
 
@@ -134,6 +134,6 @@ stages:
               inputs:
                 provider: 'azurerm'
                 command: 'apply'
-                commandOptions: '-auto-approve -input=false -tfplan tfplan'
+                commandOptions: '-auto-approve -input=false -tfplan tfplan -var="default_subscription_id=$(SUBSCRIPTION_ID)"'
                 workingDirectory: '$(System.DefaultWorkingDirectory)'
                 environmentServiceNameAzureRM: '$(AZURE_SVC_NAME)'
