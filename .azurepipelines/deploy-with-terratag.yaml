@@ -34,7 +34,8 @@ stages:
               ARM_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
               ARM_USE_AZUREAD: true
               ARM_USE_OIDC: true
-
+              ARM_SKIP_PROVIDER_REGISTRATION: true
+              
           # Add metadata tagging using Terratag
           - task: Bash@3
             displayName: "Add metadata tagging using Terratag"
