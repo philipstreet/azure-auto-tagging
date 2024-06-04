@@ -31,10 +31,10 @@ export tags=$(echo "{\"git_branch_name\":\"$branch_name\",\"git_user_name\":\"$l
 
 # run terraform providers
 # terraform providers schema -json
-terraform providers
+# terraform providers
 
 # apply Terratag tags
-#./terratag -tags=$tags
+./terratag -tags=$tags
 
 # show folder contents
 ls -al
