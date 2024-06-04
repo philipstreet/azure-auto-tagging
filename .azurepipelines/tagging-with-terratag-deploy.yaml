@@ -75,7 +75,8 @@ stages:
                 export tags=$(echo "{\"git_branch_name\":\"$branch_name\",\"git_user_name\":\"$last_commit_user_name\",\"git_user_email\":\"$last_commit_user_email\",\"git_commit_datetime\":\"$last_commit_datetime\",\"git_repo_url\":\"$repo_url\",\"git_commit_hash\":\"$commit_hash\"}" | sed 's/ /_/g')
 
                 # run terraform providers
-                terraform providers schema -json
+                # terraform providers schema -json
+                terraform providers
 
                 # apply Terratag tags
                 #./terratag -tags=$tags
@@ -86,6 +87,7 @@ stages:
               ARM_TENANT_ID: $(AZURE_TENANT_ID)
               ARM_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
               ARM_CLIENT_ID: $(AZURE_CLIENT_ID)
+              TF_VAR_DEFAULT_SUBSCRIPTION_ID: $(SUBSCRIPTION_ID)
               ARM_USE_AZUREAD: true
               ARM_USE_OIDC: true
 
