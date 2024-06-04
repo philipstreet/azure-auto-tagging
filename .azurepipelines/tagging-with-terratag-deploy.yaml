@@ -92,7 +92,7 @@ stages:
           #     ARM_USE_OIDC: true
 
           - task: AzureCLI@2
-            name: 'Add-metadata-tagging-using-Terratag'
+            name: 'Add_metadata_tagging_using_Terratag'
             displayName: 'Add metadata tagging using Terratag'
             inputs:
               azureSubscription: $(AZURE_SVC_NAME)
