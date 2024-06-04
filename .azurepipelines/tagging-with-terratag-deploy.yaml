@@ -29,7 +29,7 @@ stages:
               workingDirectory: '$(System.DefaultWorkingDirectory)'
             env:
               ARM_USE_AZUREAD: true
-              #ARM_USE_OIDC: true
+              ARM_USE_OIDC: true
 
           - task: TerraformTaskV4@4
             displayName: 'Terraform_Validate'
@@ -99,7 +99,7 @@ stages:
               environmentServiceNameAzureRM: '$(AZURE_SVC_NAME)'
             env:
               ARM_USE_AZUREAD: true
-              #ARM_USE_OIDC: true
+              ARM_USE_OIDC: true
 
           - task: ArchiveFiles@2
             inputs:
@@ -154,4 +154,4 @@ stages:
                 environmentServiceNameAzureRM: '$(AZURE_SVC_NAME)'
               env:
                 ARM_USE_AZUREAD: true
-                #ARM_USE_OIDC: true
+                ARM_USE_OIDC: true
