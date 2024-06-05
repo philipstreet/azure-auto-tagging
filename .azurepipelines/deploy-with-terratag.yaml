@@ -1,4 +1,4 @@
-name: dev - tagging-with-terratag - Deploy
+name: dev - tagging-with-terratag (Bash) - Deploy
 
 pool: 
   vmImage: 'ubuntu-latest'

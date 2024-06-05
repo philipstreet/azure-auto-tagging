@@ -1,4 +1,4 @@
-name: dev - tagging-with-yor - Deploy
+name: dev - tagging-with-yor (TerraformTask) - Deploy
 
 pool: 
   vmImage: 'ubuntu-latest'
