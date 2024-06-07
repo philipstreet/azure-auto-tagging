@@ -2,6 +2,9 @@
 export TF_LOG=DEBUG
 export TF_LOG_PATH=terraform.log
 
+# Write OIDC token to env variable
+Write-Host "##vso[task.setvariable variable=ARM_OIDC_TOKEN]$env:idToken"
+
 # Get latest release number from https://github.com/env0/terratag/releases/download/
 api_url="https://api.github.com/repos/env0/terratag/releases/latest"
 response=$(curl --silent $api_url)
