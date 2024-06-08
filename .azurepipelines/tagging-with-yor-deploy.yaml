@@ -25,36 +25,58 @@ stages:
               backendAzureRmResourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
               backendAzureRmStorageAccountName: '$(AZURE_STORAGE_ACCOUNT_NAME)'
               backendAzureRmContainerName: 'tfstate'
-              backendAzureRmKey: 'azure-auto-tagging-with-terratag.ado.tfstate'
+              backendAzureRmKey: 'azure-auto-tagging-with-yor.ado.tfstate'
               workingDirectory: '$(System.DefaultWorkingDirectory)'
 
-          - task: Bash@3
-            displayName: "Add metadata tagging using Yor"
+          # - task: Bash@3
+          #   displayName: "Add metadata tagging using Yor"
+          #   inputs:
+          #     targetType: 'inline'
+          #     workingDirectory: "$(System.DefaultWorkingDirectory)"
+          #     script: |
+          #       # download Yor
+          #       curl -s -k https://api.github.com/repos/bridgecrewio/yor/releases/latest | jq '.assets[] | select(.name | contains("linux_386")) | select(.content_type | contains("gzip")) | .browser_download_url' -r | awk '{print "curl -L -k " $0 " -o yor.tar.gz"}' | sh
+          #       tar -xf yor.tar.gz
+          #       chmod +x yor
+          #       ./yor --version
+
+          #       # run Yor
+          #       yor tag --directory tagging --dry-run --parsers Terraform
+          #       yor tag --directory tagging --parsers Terraform
+
+          #       # show folder contents
+          #       ls -al
+
+          - task: AzureCLI@2
+            name: 'Add_metadata_tagging_using_Yor'
+            displayName: 'Add metadata tagging using Yor'
             inputs:
-              targetType: 'inline'
+              azureSubscription: $(AZURE_SVC_NAME)
+              scriptType: 'bash'
+              scriptLocation: 'scriptPath'
+              scriptPath: './scripts/yor.sh'
+              addSpnToEnvironment: true
               workingDirectory: "$(System.DefaultWorkingDirectory)"
-              script: |
-                # download Yor
-                curl -s -k https://api.github.com/repos/bridgecrewio/yor/releases/latest | jq '.assets[] | select(.name | contains("linux_386")) | select(.content_type | contains("gzip")) | .browser_download_url' -r | awk '{print "curl -L -k " $0 " -o yor.tar.gz"}' | sh
-                tar -xf yor.tar.gz
-                chmod +x yor
-                ./yor --version
-
-                # run Yor
-                yor tag --directory tagging --dry-run --parsers Terraform
-                yor tag --directory tagging --parsers Terraform
-
-                # show folder contents
-                ls -al
+              useGlobalConfig: true
+            env:
+              ARM_TENANT_ID: $(AZURE_TENANT_ID)
+              ARM_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
+              ARM_CLIENT_ID: $(AZURE_CLIENT_ID)
+              TF_VAR_DEFAULT_SUBSCRIPTION_ID: $(SUBSCRIPTION_ID)
+              ARM_USE_AZUREAD: true
+              ARM_USE_OIDC: true
 
           - task: TerraformTaskV4@4
             name: 'terraformPlan'
             inputs:
               provider: 'azurerm'
               command: 'plan'
-              commandOptions: '-input=false -var-file "./terraform.tfvars" -out=tfplan'
+              commandOptions: '-input=false -var-file "./terraform.tfvars" -out=tfplan -var="default_subscription_id=$(SUBSCRIPTION_ID)"'
               workingDirectory: '$(System.DefaultWorkingDirectory)'
-              environmentServiceNameAzureRM: 'svcDev'
+              environmentServiceNameAzureRM: '$(AZURE_SVC_NAME)'
+            env:
+              ARM_USE_AZUREAD: true
+              ARM_USE_OIDC: true
 
           - task: ArchiveFiles@2
             inputs:
@@ -104,6 +126,6 @@ stages:
               inputs:
                 provider: 'azurerm'
                 command: 'apply'
-                commandOptions: '-auto-approve -input=false -tfplan tfplan'
+                commandOptions: '-auto-approve -input=false -tfplan tfplan -var="default_subscription_id=$(SUBSCRIPTION_ID)"'
                 workingDirectory: '$(System.DefaultWorkingDirectory)'
                 environmentServiceNameAzureRM: 'svcDev'
