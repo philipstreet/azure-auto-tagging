@@ -19,7 +19,7 @@ tar -xvf $tar
 rm -rf $tar
 
 # execute script get-git-metadata.sh
-source ./get-git-metadata.sh
+source ./scripts/get-git-metadata.sh
 
 # apply Terratag tags
 ./terratag -dir=./ -tags=$TAGS
