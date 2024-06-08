@@ -9,4 +9,4 @@ yor tag --directory tagging --dry-run --parsers Terraform
 yor tag --directory tagging --parsers Terraform
 
 # show folder contents
-ls -al
+# ls -al
