@@ -14,7 +14,8 @@ stages:
     jobs:
       - job: Terraform_plan
         steps:
-          #- checkout: self
+          - checkout: self
+            fetchDepth: 0
 
           - task: TerraformTaskV4@4
             name: 'Terraform_Init'
