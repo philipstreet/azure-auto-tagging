@@ -50,7 +50,7 @@ GIT_COMMIT_SHA=${GITHUB_SHA}
 # get branch name
 GIT_BRANCH=${GITHUB_REF#refs/heads/}
 # set TAGS variable
-TAGS=$(echo "{\"user_name\":\"$GIT_LAST_COMMIT_USER_NAME\",\"user_email\":\"$GIT_LAST_COMMIT_USER_EMAIL\",\"commit_datetime\":\"$GIT_LAST_COMMIT_DATE\",\"repo_url\":\"$GIT_REPO_URL\",\"commit_hash\":\"$GIT_COMMIT_SHA\"}" | sed 's/ /_/g')
+TAGS=$(echo "{\"git_branch_name\":\"$branch_name\",\"git_user_name\":\"$last_commit_user_name\",\"git_user_email\":\"$last_commit_user_email\",\"git_commit_datetime\":\"$last_commit_datetime\",\"git_repo_url\":\"$repo_url\",\"git_commit_hash\":\"$commit_hash\"}" | sed 's/ /_/g')
 
 # apply Terratag tags
 ./terratag -dir=./ -tags=$TAGS
