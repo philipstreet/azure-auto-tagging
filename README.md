@@ -42,10 +42,6 @@ This will provide proof that the frameworks can handle the three different appro
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_backend_container_name"></a> [backend\_container\_name](#input\_backend\_container\_name) | Name of the container to use for the backend. | `string` | n/a | yes |
-| <a name="input_backend_key"></a> [backend\_key](#input\_backend\_key) | Name of the blob to use for the backend. | `string` | n/a | yes |
-| <a name="input_backend_resource_group_name"></a> [backend\_resource\_group\_name](#input\_backend\_resource\_group\_name) | Name of the resource group to use for the backend. | `string` | n/a | yes |
-| <a name="input_backend_storage_account_name"></a> [backend\_storage\_account\_name](#input\_backend\_storage\_account\_name) | Name of the storage account to use for the backend. | `string` | n/a | yes |
 | <a name="input_default_subscription_id"></a> [default\_subscription\_id](#input\_default\_subscription\_id) | ID of default subscription to which this deployment should be made. | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment in which the resources will be created. | `string` | n/a | yes |
 | <a name="input_location"></a> [location](#input\_location) | The location/region where the resources will be created. | `string` | n/a | yes |
