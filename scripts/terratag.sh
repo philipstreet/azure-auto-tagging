@@ -1,7 +1,3 @@
-# set env variables for Terraform debug logging
-# export TF_LOG=DEBUG
-# export TF_LOG_PATH=terraform.log
-
 # Set ARM_OIDC_TOKEN environment variable with value of idToken environment variable
 export ARM_OIDC_TOKEN=$idToken
 
@@ -22,42 +18,8 @@ curl -O -L $tar_url
 tar -xvf $tar 
 rm -rf $tar
 
-# # get commit user name
-# export last_commit_user_name=$(git show -s --format=%an 2>&1)
-# # get commit user email
-# export last_commit_user_email=$(git show -s --format=%ae 2>&1)
-# # get commit datetime
-# export last_commit_datetime=$(git show -s --format=%ci 2>&1)
-# # get repo url
-# export repo_url=$(git ls-remote --get-url 2>&1)
-# # get commit hash
-# export commit_hash=$(git rev-parse HEAD 2>&1)
-# # get branch name
-# export branch_name=$(git rev-parse --abbrev-ref HEAD 2>&1)
-# # create tags
-# export tags=$(echo "{\"git_branch_name\":\"$branch_name\",\"git_user_name\":\"$last_commit_user_name\",\"git_user_email\":\"$last_commit_user_email\",\"git_commit_datetime\":\"$last_commit_datetime\",\"git_repo_url\":\"$repo_url\",\"git_commit_hash\":\"$commit_hash\"}" | sed 's/ /_/g')
-
-# # get commit user name
-# GIT_LAST_COMMIT_USER_NAME=$(git show -s --format=%an 2>&1)
-# # get commit user email
-# GIT_LAST_COMMIT_USER_EMAIL=$(git show -s --format=%ae 2>&1)
-# # get commit datetime
-# GIT_LAST_COMMIT_DATE=$(git show -s --format=%ci 2>&1)
-# # get repo url
-# GIT_REPO_URL=$(git ls-remote --get-url 2>&1)
-# # get branch name
-# GIT_BRANCH=${GITHUB_REF#refs/heads/}
-# # set TAGS variable
-# TAGS=$(echo "{\"git_branch_name\":\"$GIT_BRANCH\",\"git_last_commit_by_name\":\"$GIT_LAST_COMMIT_USER_NAME\",\"git_last_commit_by_email\":\"$GIT_LAST_COMMIT_USER_EMAIL\",\"git_last_commit_at\":\"$GIT_LAST_COMMIT_DATE\",\"git_repo_url\":\"$GIT_REPO_URL\",\"git_commit\":\"$GITHUB_SHA\"}" | sed 's/ /_/g')
-
 # execute script get-git-metadata.sh
 source ./get-git-metadata.sh
 
 # apply Terratag tags
 ./terratag -dir=./ -tags=$TAGS
-
-# show folder contents
-# ls -al
-
-# show terraform log
-# cat terraform.log
