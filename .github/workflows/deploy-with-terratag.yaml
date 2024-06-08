@@ -7,7 +7,7 @@ on:
       environment:
         description: 'Deployment environment'
         required: true
-        default: 'ks-philipstreet'
+        default: 'philipstreet-dev'
         type: choice
         options:
           - 'ks-philipstreet'
