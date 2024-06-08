@@ -68,21 +68,6 @@ jobs:
         - name: Get git metatadata
           id: git-metadata
           run: |
-            # # get commit user name
-            # GIT_LAST_COMMIT_USER_NAME=$(git show -s --format=%an 2>&1)
-            # # get commit user email
-            # GIT_LAST_COMMIT_USER_EMAIL=$(git show -s --format=%ae 2>&1)
-            # # get commit datetime
-            # GIT_LAST_COMMIT_DATE=$(git show -s --format=%ci 2>&1)
-            # # get repo url
-            # GIT_REPO_URL=$(git ls-remote --get-url 2>&1)
-            # # get commit hash
-            # GIT_COMMIT_SHA=${GITHUB_SHA}
-            # # get branch name
-            # GIT_BRANCH=${GITHUB_REF#refs/heads/}
-            # # set TAGS variable
-            # TAGS=$(echo "{\"user_name\":\"$GIT_LAST_COMMIT_USER_NAME\",\"user_email\":\"$GIT_LAST_COMMIT_USER_EMAIL\",\"commit_datetime\":\"$GIT_LAST_COMMIT_DATE\",\"repo_url\":\"$GIT_REPO_URL\",\"commit_hash\":\"$GIT_COMMIT_SHA\"}" | sed 's/ /_/g')
-            
             # execute ./scripts/get-git-metadata.sh
             source ./scripts/get-git-metadata.sh
 
