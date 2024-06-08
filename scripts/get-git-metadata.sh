@@ -7,7 +7,7 @@ GIT_LAST_COMMIT_DATE=$(git show -s --format=%ci 2>&1)
 # get repo url
 GIT_REPO_URL=$(git ls-remote --get-url 2>&1)
 # get branch name
-GIT_BRANCH=$(git branch --show-current 2>&1)
+GIT_BRANCH=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/' 2>&1)
 #get git commit sha
 GIT_COMMIT_SHA=$(git rev-parse HEAD)
 
