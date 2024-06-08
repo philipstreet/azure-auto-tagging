@@ -1,6 +1,6 @@
 # set env variables for Terraform debug logging
-export TF_LOG=DEBUG
-export TF_LOG_PATH=terraform.log
+# export TF_LOG=DEBUG
+# export TF_LOG_PATH=terraform.log
 
 # Set ARM_OIDC_TOKEN environment variable with value of idToken environment variable
 export ARM_OIDC_TOKEN=$idToken
@@ -41,7 +41,7 @@ export tags=$(echo "{\"git_branch_name\":\"$branch_name\",\"git_user_name\":\"$l
 ./terratag -dir=./ -tags=$tags
 
 # show folder contents
-ls -al
+# ls -al
 
 # show terraform log
-cat terraform.log
+# cat terraform.log
