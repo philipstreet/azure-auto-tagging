@@ -37,20 +37,21 @@ rm -rf $tar
 # # create tags
 # export tags=$(echo "{\"git_branch_name\":\"$branch_name\",\"git_user_name\":\"$last_commit_user_name\",\"git_user_email\":\"$last_commit_user_email\",\"git_commit_datetime\":\"$last_commit_datetime\",\"git_repo_url\":\"$repo_url\",\"git_commit_hash\":\"$commit_hash\"}" | sed 's/ /_/g')
 
-# get commit user name
-GIT_LAST_COMMIT_USER_NAME=$(git show -s --format=%an 2>&1)
-# get commit user email
-GIT_LAST_COMMIT_USER_EMAIL=$(git show -s --format=%ae 2>&1)
-# get commit datetime
-GIT_LAST_COMMIT_DATE=$(git show -s --format=%ci 2>&1)
-# get repo url
-GIT_REPO_URL=$(git ls-remote --get-url 2>&1)
-# get commit hash
-GIT_COMMIT_SHA=${GITHUB_SHA}
-# get branch name
-GIT_BRANCH=${GITHUB_REF#refs/heads/}
-# set TAGS variable
-TAGS=$(echo "{\"git_branch_name\":\"$branch_name\",\"git_user_name\":\"$last_commit_user_name\",\"git_user_email\":\"$last_commit_user_email\",\"git_commit_datetime\":\"$last_commit_datetime\",\"git_repo_url\":\"$repo_url\",\"git_commit_hash\":\"$commit_hash\"}" | sed 's/ /_/g')
+# # get commit user name
+# GIT_LAST_COMMIT_USER_NAME=$(git show -s --format=%an 2>&1)
+# # get commit user email
+# GIT_LAST_COMMIT_USER_EMAIL=$(git show -s --format=%ae 2>&1)
+# # get commit datetime
+# GIT_LAST_COMMIT_DATE=$(git show -s --format=%ci 2>&1)
+# # get repo url
+# GIT_REPO_URL=$(git ls-remote --get-url 2>&1)
+# # get branch name
+# GIT_BRANCH=${GITHUB_REF#refs/heads/}
+# # set TAGS variable
+# TAGS=$(echo "{\"git_branch_name\":\"$GIT_BRANCH\",\"git_last_commit_by_name\":\"$GIT_LAST_COMMIT_USER_NAME\",\"git_last_commit_by_email\":\"$GIT_LAST_COMMIT_USER_EMAIL\",\"git_last_commit_at\":\"$GIT_LAST_COMMIT_DATE\",\"git_repo_url\":\"$GIT_REPO_URL\",\"git_commit\":\"$GITHUB_SHA\"}" | sed 's/ /_/g')
+
+# execute script get-git-metadata.sh
+source ./get-git-metadata.sh
 
 # apply Terratag tags
 ./terratag -dir=./ -tags=$TAGS
