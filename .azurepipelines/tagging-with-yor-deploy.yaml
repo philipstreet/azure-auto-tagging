@@ -15,7 +15,7 @@ stages:
       - job: Terraform_plan
         steps:
           - checkout: self
-            fetchDepth: 0
+            fetchDepth: 0 # Seems to be required for Yor, otherwise "git blame" does not work
 
           - task: TerraformTaskV4@4
             name: 'terraformInit'
@@ -28,25 +28,6 @@ stages:
               backendAzureRmContainerName: 'tfstate'
               backendAzureRmKey: 'azure-auto-tagging-with-yor.ado.tfstate'
               workingDirectory: '$(System.DefaultWorkingDirectory)'
-
-          # - task: Bash@3
-          #   displayName: "Add metadata tagging using Yor"
-          #   inputs:
-          #     targetType: 'inline'
-          #     workingDirectory: "$(System.DefaultWorkingDirectory)"
-          #     script: |
-          #       # download Yor
-          #       curl -s -k https://api.github.com/repos/bridgecrewio/yor/releases/latest | jq '.assets[] | select(.name | contains("linux_386")) | select(.content_type | contains("gzip")) | .browser_download_url' -r | awk '{print "curl -L -k " $0 " -o yor.tar.gz"}' | sh
-          #       tar -xf yor.tar.gz
-          #       chmod +x yor
-          #       ./yor --version
-
-          #       # run Yor
-          #       yor tag --directory tagging --dry-run --parsers Terraform
-          #       yor tag --directory tagging --parsers Terraform
-
-          #       # show folder contents
-          #       ls -al
 
           - task: AzureCLI@2
             name: 'Add_metadata_tagging_using_Yor'
@@ -129,4 +110,4 @@ stages:
                 command: 'apply'
                 commandOptions: '-auto-approve -input=false -tfplan tfplan -var="default_subscription_id=$(SUBSCRIPTION_ID)"'
                 workingDirectory: '$(System.DefaultWorkingDirectory)'
-                environmentServiceNameAzureRM: 'svcDev'
+                environmentServiceNameAzureRM: $(AZURE_SVC_NAME)
