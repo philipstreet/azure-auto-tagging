@@ -108,6 +108,6 @@ stages:
               inputs:
                 provider: 'azurerm'
                 command: 'apply'
-                commandOptions: '-auto-approve -input=false -var="default_subscription_id=$(SUBSCRIPTION_ID)" tfplan'
+                commandOptions: '-auto-approve -input=false tfplan'
                 workingDirectory: '$(System.DefaultWorkingDirectory)'
                 environmentServiceNameAzureRM: $(AZURE_SVC_NAME)
