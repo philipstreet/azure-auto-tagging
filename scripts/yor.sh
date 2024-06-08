@@ -11,5 +11,5 @@ echo "Show folder contents"
 ls -al
 
 # run Yor
-./yor tag --directory tagging --dry-run --parsers Terraform
-./yor tag --directory tagging --parsers Terraform
+./yor tag --directory . --dry-run --parsers Terraform
+./yor tag --directory . --parsers Terraform
