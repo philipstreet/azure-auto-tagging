@@ -6,10 +6,8 @@ GIT_LAST_COMMIT_USER_EMAIL=$(git show -s --format=%ae 2>&1)
 GIT_LAST_COMMIT_DATE=$(git show -s --format=%ci 2>&1)
 # get repo url
 GIT_REPO_URL=$(git ls-remote --get-url 2>&1)
-# get branch name
-GIT_BRANCH=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/' 2>&1)
 #get git commit sha
 GIT_COMMIT_SHA=$(git rev-parse HEAD)
 
 # set TAGS variable
-export TAGS=$(echo "{\"git_branch_name\":\"$GIT_BRANCH\",\"git_last_commit_by_name\":\"$GIT_LAST_COMMIT_USER_NAME\",\"git_last_commit_by_email\":\"$GIT_LAST_COMMIT_USER_EMAIL\",\"git_last_commit_at\":\"$GIT_LAST_COMMIT_DATE\",\"git_repo_url\":\"$GIT_REPO_URL\",\"git_commit\":\"$GIT_COMMIT_SHA\"}" | sed 's/ /_/g')
+export TAGS=$(echo "{\"git_last_commit_by_name\":\"$GIT_LAST_COMMIT_USER_NAME\",\"git_last_commit_by_email\":\"$GIT_LAST_COMMIT_USER_EMAIL\",\"git_last_commit_at\":\"$GIT_LAST_COMMIT_DATE\",\"git_repo_url\":\"$GIT_REPO_URL\",\"git_commit\":\"$GIT_COMMIT_SHA\"}" | sed 's/ /_/g')
