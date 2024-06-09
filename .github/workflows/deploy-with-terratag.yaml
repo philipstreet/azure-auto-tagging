@@ -147,12 +147,16 @@ jobs:
                 })
     
     deploy-gate:
-      needs: terraform-plan
+      name: 'Approgal Gate'
+      needs: [terraform-plan]
       runs-on: ubuntu-latest
+      defaults:
+        run:
+          shell: bash
       environment: deploy-gate
       steps:
         - name: wait-for-approval
-          run: write-host "Please approve the deployment in the GitHub UI"
+          run: echo "Please approve the deployment in the GitHub UI"
 
     terraform-apply:
         name: 'Terraform Apply'
