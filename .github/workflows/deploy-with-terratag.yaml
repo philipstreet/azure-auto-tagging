@@ -146,6 +146,14 @@ jobs:
                     body: body
                 })
     
+    deploy-gate:
+      needs: terraform-plan
+      runs-on: ubuntu-latest
+      environment: deploy-gate
+      steps:
+        - name: wait-for-approval
+          run: write-host "Please approve the deployment in the GitHub UI"
+
     terraform-apply:
         name: 'Terraform Apply'
         environment: ${{ inputs.environment }}
