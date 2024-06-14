@@ -7,5 +7,8 @@ module "naming" {
 resource "azurerm_resource_group" "this" {
   location = var.location
   name     = module.naming.resource_group.name_unique
+  timeouts {
+    create = "30m"
+  }
   tags     = local.tags
 }
