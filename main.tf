@@ -10,5 +10,5 @@ resource "azurerm_resource_group" "this" {
   timeouts {
     create = "30m"
   }
-  tags     = local.tags
+  tags = local.tags
 }
