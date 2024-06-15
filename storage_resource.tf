@@ -6,7 +6,7 @@ resource "azurerm_storage_account" "this" {
   resource_group_name              = azurerm_resource_group.this.name
   enable_https_traffic_only        = true
   public_network_access_enabled    = true
-  cross_tenant_replication_enabled = false
+  #cross_tenant_replication_enabled = false
   min_tls_version                  = "TLS1_2"
   tags = merge(local.tags, {
     git_commit           = "3ce2dda8cb9d58a916bea606129145939925f341"
