@@ -9,9 +9,9 @@ resource "azurerm_storage_account" "this" {
   #cross_tenant_replication_enabled = false
   min_tls_version = "TLS1_2"
   tags = merge(local.tags, {
-    git_commit           = "N/A"
+    git_commit           = "42324a18ee489652a130fd8698791b4d52b569e7"
     git_file             = "storage_resource.tf"
-    git_last_modified_at = "2024-06-15 13:34:44"
+    git_last_modified_at = "2024-06-15 13:35:00"
     git_last_modified_by = "philip.street@kainos.com"
     git_modifiers        = "philip.street"
     git_org              = "philipstreet"
