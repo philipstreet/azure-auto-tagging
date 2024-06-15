@@ -7,9 +7,9 @@ resource "azurerm_storage_account" "this" {
   public_network_access_enabled = true
   enable_https_traffic_only     = true
   tags = merge(var.tags, {
-    git_commit           = "7713b19e27e79926f52c524930a9d144f7dbabd1"
+    git_commit           = "59ddb922d34bae26b21e998b9be929b665dbb7bc"
     git_file             = "modules/test/main.tf"
-    git_last_modified_at = "2024-05-30 13:56:11"
+    git_last_modified_at = "2024-06-15 13:10:19"
     git_last_modified_by = "philip.street@kainos.com"
     git_modifiers        = "philip.street"
     git_org              = "philipstreet"

@@ -1,17 +1,17 @@
 resource "azurerm_storage_account" "this" {
-  account_replication_type         = "LRS"
-  account_tier                     = "Standard"
-  name                             = "${module.naming.storage_account.name_unique}001"
-  location                         = azurerm_resource_group.this.location
-  resource_group_name              = azurerm_resource_group.this.name
-  enable_https_traffic_only        = true
-  public_network_access_enabled    = true
+  account_replication_type      = "LRS"
+  account_tier                  = "Standard"
+  name                          = "${module.naming.storage_account.name_unique}001"
+  location                      = azurerm_resource_group.this.location
+  resource_group_name           = azurerm_resource_group.this.name
+  enable_https_traffic_only     = true
+  public_network_access_enabled = true
   #cross_tenant_replication_enabled = false
-  min_tls_version                  = "TLS1_2"
+  min_tls_version = "TLS1_2"
   tags = merge(local.tags, {
-    git_commit           = "3ce2dda8cb9d58a916bea606129145939925f341"
+    git_commit           = "N/A"
     git_file             = "storage_resource.tf"
-    git_last_modified_at = "2024-06-15 13:03:30"
+    git_last_modified_at = "2024-06-15 13:34:44"
     git_last_modified_by = "philip.street@kainos.com"
     git_modifiers        = "philip.street"
     git_org              = "philipstreet"
