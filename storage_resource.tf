@@ -8,5 +8,15 @@ resource "azurerm_storage_account" "this" {
   public_network_access_enabled    = true
   cross_tenant_replication_enabled = false
   min_tls_version                  = "TLS1_2"
-  tags                             = local.tags
+  tags = merge(local.tags, {
+    git_commit           = "3ce2dda8cb9d58a916bea606129145939925f341"
+    git_file             = "storage_resource.tf"
+    git_last_modified_at = "2024-06-15 13:03:30"
+    git_last_modified_by = "philip.street@kainos.com"
+    git_modifiers        = "philip.street"
+    git_org              = "philipstreet"
+    git_repo             = "azure-auto-tagging"
+    yor_name             = "this"
+    yor_trace            = "ebce2a7e-41b6-4a16-ba46-048b0c979d1d"
+  })
 }

@@ -9,5 +9,15 @@ module "remote_storage_account" {
   shared_access_key_enabled     = true
   account_replication_type      = "LRS"
   network_rules                 = null
-  tags                          = local.tags
+  tags = merge(local.tags, {
+    git_commit           = "eb9bb89e91164bdc87829051da736a6b307f5911"
+    git_file             = "storage_remote_module.tf"
+    git_last_modified_at = "2024-06-09 12:50:49"
+    git_last_modified_by = "philip.street@kainos.com"
+    git_modifiers        = "philip.street"
+    git_org              = "philipstreet"
+    git_repo             = "azure-auto-tagging"
+    yor_name             = "remote_storage_account"
+    yor_trace            = "ccf2d4de-4738-4f98-a870-9c0447fa6374"
+  })
 }
