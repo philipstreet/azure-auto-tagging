@@ -27,7 +27,7 @@ stages:
               backendAzureRmStorageAccountName: '$(AZURE_STORAGE_ACCOUNT_NAME)'
               backendAzureRmContainerName: 'tfstate'
               backendAzureRmKey: 'azure-auto-tagging-with-yor.ado.tfstate'
-              workingDirectory: '$(System.DefaultWorkingDirectory)'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/yor'
 
           - task: AzureCLI@2
             name: 'Add_metadata_tagging_using_Yor'
@@ -38,7 +38,7 @@ stages:
               scriptLocation: 'scriptPath'
               scriptPath: './scripts/yor.sh'
               addSpnToEnvironment: true
-              workingDirectory: "$(System.DefaultWorkingDirectory)"
+              workingDirectory: "$(System.DefaultWorkingDirectory)/yor"
               useGlobalConfig: true
             env:
               ARM_TENANT_ID: $(AZURE_TENANT_ID)
@@ -54,7 +54,7 @@ stages:
               provider: 'azurerm'
               command: 'plan'
               commandOptions: '-input=false -var-file "./terraform.tfvars" -out=tfplan -var="default_subscription_id=$(SUBSCRIPTION_ID)"'
-              workingDirectory: '$(System.DefaultWorkingDirectory)'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/yor'
               environmentServiceNameAzureRM: '$(AZURE_SVC_NAME)'
             env:
               ARM_USE_AZUREAD: true
@@ -98,7 +98,7 @@ stages:
             - task: ExtractFiles@1
               inputs:
                 archiveFilePatterns: '$(System.ArtifactsDirectory)/$(Build.BuildId)-tfplan/$(Build.BuildId).tgz'
-                destinationFolder: "$(System.DefaultWorkingDirectory)"
+                destinationFolder: "$(System.DefaultWorkingDirectory)/yor"
                 cleanDestinationFolder: false
                 overwriteExistingFiles: true
                 displayName: 'Extract Terraform Plan Artifact'
@@ -109,5 +109,5 @@ stages:
                 provider: 'azurerm'
                 command: 'apply'
                 commandOptions: '-auto-approve -input=false tfplan'
-                workingDirectory: '$(System.DefaultWorkingDirectory)'
+                workingDirectory: '$(System.DefaultWorkingDirectory)/yor'
                 environmentServiceNameAzureRM: $(AZURE_SVC_NAME)
