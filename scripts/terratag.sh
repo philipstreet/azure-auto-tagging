@@ -18,8 +18,11 @@ curl -O -L $tar_url
 tar -xvf $tar 
 rm -rf $tar
 
+# get folder contents
+ls -al
+
 # execute script get-git-metadata.sh
-source ./get-git-metadata.sh
+sh ./get-git-metadata.sh
 
 # apply Terratag tags
 ./terratag -dir=./ -tags=$TAGS
