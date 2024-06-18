@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # download Yor
 echo "** Downloading Yor **"
 curl -s -k https://api.github.com/repos/bridgecrewio/yor/releases/latest | jq '.assets[] | select(.name | contains("linux_386")) | select(.content_type | contains("gzip")) | .browser_download_url' -r | awk '{print "curl -L -k " $0 " -o yor.tar.gz"}' | sh

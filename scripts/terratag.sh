@@ -1,3 +1,12 @@
+#!/bin/bash
+
+# get for 'directory' parameter
+if [ $1 ]; then
+  directory=$1
+else
+  directory="./"
+fi
+
 # Set ARM_OIDC_TOKEN environment variable with value of idToken environment variable
 export ARM_OIDC_TOKEN=$idToken
 
@@ -25,4 +34,4 @@ ls -al
 sh ./get-git-metadata.sh
 
 # apply Terratag tags
-./terratag -dir=./ -tags=$TAGS
+./terratag -dir=$directory -tags=$TAGS

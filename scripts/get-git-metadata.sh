@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # get commit user name
 GIT_LAST_COMMIT_USER_NAME=$(git show -s --format=%an 2>&1)
 # get commit user email
