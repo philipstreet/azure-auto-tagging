@@ -23,8 +23,10 @@ tar_url="https://github.com/env0/terratag/releases/download/${latest_version}/te
 tar="terratag_${latest_version_without_v}_linux_amd64.tar.gz"
 
 # Download Terratag
-curl -O -L $tar_url 
-tar -xvf $tar 
+curl -O -L $tar_url
+# extract $tar file to directory '/bin'
+tar -xvf $tar -C /bin
+# remove $tar file
 rm -rf $tar
 
 # get folder contents
@@ -34,4 +36,4 @@ ls -al
 sh ./scripts/get-git-metadata.sh
 
 # apply Terratag tags
-./terratag -dir=$directory -tags=$TAGS
+./bin/terratag -dir=$directory -tags=$TAGS
