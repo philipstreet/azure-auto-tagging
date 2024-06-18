@@ -31,7 +31,7 @@ rm -rf $tar
 ls -al
 
 # execute script get-git-metadata.sh
-sh ./get-git-metadata.sh
+sh ./scripts/get-git-metadata.sh
 
 # apply Terratag tags
 ./terratag -dir=$directory -tags=$TAGS
