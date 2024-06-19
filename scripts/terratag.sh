@@ -35,4 +35,4 @@ rm -rf $tar
 sh ./scripts/get-git-metadata.sh
 
 # apply Terratag tags
-/bin/terratag -dir=$directory -tags=$TAGS
+./bin/terratag -dir=$directory -tags=$TAGS
