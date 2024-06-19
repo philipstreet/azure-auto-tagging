@@ -36,7 +36,7 @@ stages:
               azureSubscription: $(AZURE_SVC_NAME)
               scriptType: 'bash'
               scriptLocation: 'scriptPath'
-              scriptPath: './scripts/yor.sh'
+              scriptPath: './yor.sh'
               addSpnToEnvironment: true
               workingDirectory: "$(System.DefaultWorkingDirectory)/yor"
               useGlobalConfig: true
