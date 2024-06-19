@@ -55,6 +55,7 @@ jobs:
     
         # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
         - name: Terraform Init
+          working-directory: ./yor
           run: |
             terraform init -input=false -no-color \
               -backend-config="resource_group_name=${{ secrets.AZURE_RG_NAME }}" \
@@ -73,6 +74,7 @@ jobs:
         # Generates an execution plan for Terraform
         # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
         - name: Terraform Plan
+          working-directory: ./yor
           id: tf-plan
           run: |
             export exitcode=0
@@ -92,7 +94,7 @@ jobs:
           uses: actions/upload-artifact@v4
           with:
             name: tfplan
-            path: tfplan
+            path: yor/tfplan
     
         # Create string output of Terraform Plan
         - name: Create String Output
@@ -171,6 +173,7 @@ jobs:
 
         # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
         - name: Terraform Init
+          working-directory: ./yor
           run: |
             terraform init -input=false -no-color \
               -backend-config="resource_group_name=${{ secrets.AZURE_RG_NAME }}" \
@@ -184,7 +187,9 @@ jobs:
           uses: actions/download-artifact@v4
           with:
             name: tfplan
+            path: yor
 
         # Terraform Apply
         - name: Terraform Apply
+          working-directory: ./yor
           run: terraform apply -auto-approve tfplan
