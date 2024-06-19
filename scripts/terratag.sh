@@ -37,8 +37,5 @@ chmod +x ./scripts/get-git-metadata.sh
 # execute script get-git-metadata.sh
 . ./scripts/get-git-metadata.sh
 
-echo "TAGS=$TAGS"
-echo "directory=$directory"
-
 # apply Terratag tags
-. ./bin/terratag -dir=$directory -tags=$TAGS
+./bin/terratag -dir=$directory -tags=$TAGS
