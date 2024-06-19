@@ -32,10 +32,10 @@ tar -xvf $tar -C bin
 rm -rf $tar
 
 # set execute permissions on get-git-metadata.sh
-chmod +x ./scripts/get-git-metadata.sh
+chmod +x ./get-git-metadata.sh
 
 # execute script get-git-metadata.sh
-. ./scripts/get-git-metadata.sh
+. ./get-git-metadata.sh
 
 # apply Terratag tags
 ./bin/terratag -dir=$directory -tags=$TAGS

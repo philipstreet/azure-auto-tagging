@@ -39,7 +39,7 @@ stages:
               azureSubscription: $(AZURE_SVC_NAME)
               scriptType: 'bash'
               scriptLocation: 'scriptPath'
-              scriptPath: './scripts/terratag.sh'
+              scriptPath: 'terratag.sh'
               addSpnToEnvironment: true
               workingDirectory: "$(System.DefaultWorkingDirectory)/terratag"
               useGlobalConfig: true
