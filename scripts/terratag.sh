@@ -27,12 +27,9 @@ curl -O -L $tar_url
 # creat bin directory
 mkdir -pv bin
 # extract $tar file to directory '/bin'
-tar -xvf $tar -C /bin
+tar -xvf $tar -C bin
 # remove $tar file
 rm -rf $tar
-
-# get folder contents
-ls -al
 
 # execute script get-git-metadata.sh
 sh ./scripts/get-git-metadata.sh
