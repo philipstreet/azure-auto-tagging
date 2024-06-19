@@ -68,8 +68,8 @@ jobs:
         - name: Get git metatadata
           id: git-metadata
           run: |
-            # execute ./scripts/get-git-metadata.sh
-            source ./scripts/get-git-metadata.sh
+            # execute ./get-git-metadata.sh
+            source ./get-git-metadata.sh
 
             # export tags to Environment variable
             echo "TAGS=$TAGS" >> $GITHUB_ENV
@@ -87,7 +87,7 @@ jobs:
           id: tf-plan
           run: |
             export exitcode=0
-            terraform plan -var='default_subscription_id=${{ secrets.SUBSCRIPTION_ID }}'  -var="deployed_from=GH" -compact-warnings -detailed-exitcode -no-color -out tfplan || export exitcode=$?
+            terraform plan -var='default_subscription_id=${{ secrets.SUBSCRIPTION_ID }}' -var="deployed_from=GH" -compact-warnings -detailed-exitcode -no-color -out tfplan || export exitcode=$?
     
             echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
     
