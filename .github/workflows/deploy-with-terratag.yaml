@@ -70,9 +70,6 @@ jobs:
           working-directory: ./terratag
           id: git-metadata
           run: |
-            # list folder contents
-            ls -al
-
             # set execute permission on get-git-metadata.sh
             chmod +x get-git-metadata.sh
 
@@ -203,7 +200,9 @@ jobs:
           uses: actions/download-artifact@v4
           with:
             name: tfplan
+            path: terratag
 
         # Terraform Apply
         - name: Terraform Apply
+          working-directory: ./terratag
           run: terraform apply -auto-approve tfplan
