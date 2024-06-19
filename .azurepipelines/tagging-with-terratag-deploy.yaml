@@ -33,30 +33,32 @@ stages:
               ARM_USE_OIDC: true
 
           - task: Bash@3
+            name: 'Add_metadata_tagging_using_Terratag'
+            displayName: 'Add metadata tagging using Terratag'
             inputs:
               workingDirectory: '$(System.DefaultWorkingDirectory)/terratag'
               targetType: 'inline'
               script: |
-                ls -al
+                ./terratag.sh
 
-          - task: AzureCLI@2
-            name: 'Add_metadata_tagging_using_Terratag'
-            displayName: 'Add metadata tagging using Terratag'
-            inputs:
-              azureSubscription: $(AZURE_SVC_NAME)
-              scriptType: 'bash'
-              scriptLocation: 'scriptPath'
-              scriptPath: './terratag.sh'
-              addSpnToEnvironment: true
-              workingDirectory: "$(System.DefaultWorkingDirectory)/terratag"
-              useGlobalConfig: true
-            env:
-              ARM_TENANT_ID: $(AZURE_TENANT_ID)
-              ARM_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
-              ARM_CLIENT_ID: $(AZURE_CLIENT_ID)
-              TF_VAR_DEFAULT_SUBSCRIPTION_ID: $(SUBSCRIPTION_ID)
-              ARM_USE_AZUREAD: true
-              ARM_USE_OIDC: true
+          # - task: AzureCLI@2
+          #   name: 'Add_metadata_tagging_using_Terratag'
+          #   displayName: 'Add metadata tagging using Terratag'
+          #   inputs:
+          #     azureSubscription: $(AZURE_SVC_NAME)
+          #     scriptType: 'bash'
+          #     scriptLocation: 'scriptPath'
+          #     scriptPath: './terratag.sh'
+          #     addSpnToEnvironment: true
+          #     workingDirectory: "$(System.DefaultWorkingDirectory)/terratag"
+          #     useGlobalConfig: true
+          #   env:
+          #     ARM_TENANT_ID: $(AZURE_TENANT_ID)
+          #     ARM_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
+          #     ARM_CLIENT_ID: $(AZURE_CLIENT_ID)
+          #     TF_VAR_DEFAULT_SUBSCRIPTION_ID: $(SUBSCRIPTION_ID)
+          #     ARM_USE_AZUREAD: true
+          #     ARM_USE_OIDC: true
 
           - task: TerraformTaskV4@4
             displayName: 'Terraform_Validate'
