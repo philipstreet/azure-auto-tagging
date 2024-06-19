@@ -73,6 +73,9 @@ jobs:
             # list folder contents
             ls -al
 
+            # set execute permission on get-git-metadata.sh
+            chmod +x get-git-metadata.sh
+
             # execute ./get-git-metadata.sh
             ./get-git-metadata.sh
 
