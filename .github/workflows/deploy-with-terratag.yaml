@@ -77,7 +77,7 @@ jobs:
             chmod +x get-git-metadata.sh
 
             # execute ./get-git-metadata.sh
-            ./get-git-metadata.sh
+            . ./get-git-metadata.sh
 
             # export tags to Environment variable
             echo "TAGS=$TAGS" >> $GITHUB_ENV
@@ -87,7 +87,7 @@ jobs:
           with:
             tags: ${{ env.TAGS }}
             verbose: false
-            dir: . 
+            dir: ./terratag 
 
         # Generates an execution plan for Terraform
         # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
