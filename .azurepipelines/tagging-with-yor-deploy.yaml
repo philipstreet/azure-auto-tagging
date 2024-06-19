@@ -98,7 +98,7 @@ stages:
             - task: ExtractFiles@1
               inputs:
                 archiveFilePatterns: '$(System.ArtifactsDirectory)/$(Build.BuildId)-tfplan/$(Build.BuildId).tgz'
-                destinationFolder: "$(System.DefaultWorkingDirectory)/yor"
+                destinationFolder: "$(System.DefaultWorkingDirectory)"
                 cleanDestinationFolder: false
                 overwriteExistingFiles: true
                 displayName: 'Extract Terraform Plan Artifact'
@@ -109,5 +109,5 @@ stages:
                 provider: 'azurerm'
                 command: 'apply'
                 commandOptions: '-auto-approve -input=false tfplan'
-                workingDirectory: '$(System.DefaultWorkingDirectory)/yor'
+                workingDirectory: '$(System.DefaultWorkingDirectory)'
                 environmentServiceNameAzureRM: $(AZURE_SVC_NAME)
