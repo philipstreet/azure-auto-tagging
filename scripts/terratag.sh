@@ -32,7 +32,7 @@ tar -xvf $tar -C bin
 rm -rf $tar
 
 # execute script get-git-metadata.sh
-sh ./scripts/get-git-metadata.sh
+./scripts/get-git-metadata.sh
 
 # apply Terratag tags
 ./bin/terratag -dir=$directory -tags=$TAGS
