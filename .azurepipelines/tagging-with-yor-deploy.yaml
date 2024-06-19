@@ -29,24 +29,24 @@ stages:
               backendAzureRmKey: 'azure-auto-tagging-with-yor.ado.tfstate'
               workingDirectory: '$(System.DefaultWorkingDirectory)/yor'
 
-          - task: AzureCLI@2
-            name: 'Add_metadata_tagging_using_Yor'
-            displayName: 'Add metadata tagging using Yor'
-            inputs:
-              azureSubscription: $(AZURE_SVC_NAME)
-              scriptType: 'bash'
-              scriptLocation: 'scriptPath'
-              scriptPath: './yor.sh'
-              addSpnToEnvironment: true
-              workingDirectory: "$(System.DefaultWorkingDirectory)/yor"
-              useGlobalConfig: true
-            env:
-              ARM_TENANT_ID: $(AZURE_TENANT_ID)
-              ARM_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
-              ARM_CLIENT_ID: $(AZURE_CLIENT_ID)
-              TF_VAR_DEFAULT_SUBSCRIPTION_ID: $(SUBSCRIPTION_ID)
-              ARM_USE_AZUREAD: true
-              ARM_USE_OIDC: true
+          # - task: AzureCLI@2
+          #   name: 'Add_metadata_tagging_using_Yor'
+          #   displayName: 'Add metadata tagging using Yor'
+          #   inputs:
+          #     azureSubscription: $(AZURE_SVC_NAME)
+          #     scriptType: 'bash'
+          #     scriptLocation: 'scriptPath'
+          #     scriptPath: './yor.sh'
+          #     addSpnToEnvironment: true
+          #     workingDirectory: "$(System.DefaultWorkingDirectory)/yor"
+          #     useGlobalConfig: true
+          #   env:
+          #     ARM_TENANT_ID: $(AZURE_TENANT_ID)
+          #     ARM_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
+          #     ARM_CLIENT_ID: $(AZURE_CLIENT_ID)
+          #     TF_VAR_DEFAULT_SUBSCRIPTION_ID: $(SUBSCRIPTION_ID)
+          #     ARM_USE_AZUREAD: true
+          #     ARM_USE_OIDC: true
 
           - task: TerraformTaskV4@4
             name: 'terraformPlan'
