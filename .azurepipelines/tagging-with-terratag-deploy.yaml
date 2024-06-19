@@ -52,7 +52,7 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'plan'
-              commandOptions: '-input=false -var-file "./terraform.tfvars" -out=tfplan -var="default_subscription_id=$(SUBSCRIPTION_ID)"'
+              commandOptions: '-input=false -var-file "./terraform.tfvars" -out=tfplan -var="default_subscription_id=$(SUBSCRIPTION_ID)" -var="deployed_from=ADO"'
               workingDirectory: '$(System.DefaultWorkingDirectory)/terratag'
               environmentServiceNameAzureRM: '$(AZURE_SVC_NAME)'
             env:

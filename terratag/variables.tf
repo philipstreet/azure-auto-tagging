@@ -12,3 +12,8 @@ variable "location" {
   type        = string
   description = "The location/region where the resources will be created."
 }
+
+variable "deployed_from" {
+  type        = string
+  description = "The name of the platform from which the resources are being deployed, e.g. GH or ADO."
+}
