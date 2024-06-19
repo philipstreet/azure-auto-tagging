@@ -31,6 +31,9 @@ tar -xvf $tar -C bin
 # remove $tar file
 rm -rf $tar
 
+# set execute permissions on get-git-metadata.sh
+chmod +x ./scripts/get-git-metadata.sh
+
 # execute script get-git-metadata.sh
 ./scripts/get-git-metadata.sh
 
