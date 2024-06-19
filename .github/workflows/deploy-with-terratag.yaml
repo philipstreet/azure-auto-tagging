@@ -68,8 +68,11 @@ jobs:
         - name: Get git metatadata
           id: git-metadata
           run: |
+            # list folder contents
+            ls -al
+
             # execute ./get-git-metadata.sh
-            source ./get-git-metadata.sh
+            ./get-git-metadata.sh
 
             # export tags to Environment variable
             echo "TAGS=$TAGS" >> $GITHUB_ENV
