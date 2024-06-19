@@ -7,7 +7,8 @@ module "remote_storage_account" {
   enable_https_traffic_only     = true
   public_network_access_enabled = true
   shared_access_key_enabled     = true
-  account_replication_type      = "LRS"
-  network_rules                 = null
-  tags = local.tags
+  #cross_tenant_replication_enabled = false
+  account_replication_type = "LRS"
+  network_rules            = null
+  tags                     = local.tags
 }
