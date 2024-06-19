@@ -25,7 +25,7 @@ tar="terratag_${latest_version_without_v}_linux_amd64.tar.gz"
 # Download Terratag
 curl -O -L $tar_url
 # creat bin directory
-mkdir -p /bin
+mkdir -pv bin
 # extract $tar file to directory '/bin'
 tar -xvf $tar -C /bin
 # remove $tar file
