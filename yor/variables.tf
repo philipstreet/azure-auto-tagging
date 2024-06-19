@@ -12,3 +12,12 @@ variable "location" {
   type        = string
   description = "The location/region where the resources will be created."
 }
+
+variable "deployed_from" {
+  type        = string
+  description = "The name of the platform from which the resources are being deployed, e.g. GH or ADO."
+  validation {
+    condition     = var.deployed_from == "GH" || var.deployed_from == "ADO"
+    error_message = "deployed_from must be either GH or ADO."
+  }
+}
