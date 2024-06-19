@@ -41,7 +41,7 @@ stages:
               scriptLocation: 'scriptPath'
               scriptPath: './scripts/terratag.sh'
               addSpnToEnvironment: true
-              workingDirectory: "$(System.DefaultWorkingDirectory)"
+              workingDirectory: "$(System.DefaultWorkingDirectory)/terratag"
               useGlobalConfig: true
             env:
               ARM_TENANT_ID: $(AZURE_TENANT_ID)
