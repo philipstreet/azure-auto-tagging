@@ -56,6 +56,7 @@ jobs:
     
         # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
         - name: Terraform Init
+          working-directory: ./terratag
           run: |
             terraform init -input=false -no-color \
               -backend-config="resource_group_name=${{ secrets.AZURE_RG_NAME }}" \
@@ -66,6 +67,7 @@ jobs:
     
         # Save git metadata in environment variables
         - name: Get git metatadata
+          working-directory: ./terratag
           id: git-metadata
           run: |
             # list folder contents
@@ -79,6 +81,7 @@ jobs:
 
         # Add git metadata to resources using Terratag
         - uses: env0/terratag-action@main
+          working-directory: ./terratag
           with:
             tags: ${{ env.TAGS }}
             verbose: false
@@ -87,6 +90,7 @@ jobs:
         # Generates an execution plan for Terraform
         # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
         - name: Terraform Plan
+          working-directory: ./terratag
           id: tf-plan
           run: |
             export exitcode=0
@@ -182,6 +186,7 @@ jobs:
 
         # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
         - name: Terraform Init
+          working-directory: ./terratag
           run: |
             terraform init -input=false -no-color \
               -backend-config="resource_group_name=${{ secrets.AZURE_RG_NAME }}" \
