@@ -23,19 +23,33 @@ tar_url="https://github.com/env0/terratag/releases/download/${latest_version}/te
 tar="terratag_${latest_version_without_v}_linux_amd64.tar.gz"
 
 # Download Terratag
+echo "** Downloading Terratag **"
 curl -O -L $tar_url
+
 # creat bin directory
+echo "** Creating bin directory **"
 mkdir -pv bin
+
 # extract $tar file to directory '/bin'
+echo "** Extracting Terratag **"
 tar -xvf $tar -C bin
+
 # remove $tar file
+echo "** Remove $tar file **"
 rm -rf $tar
 
 # set execute permissions on get-git-metadata.sh
+echo "** Set execute permissions on get-git-metadata.sh **"
 chmod +x ./get-git-metadata.sh
 
 # execute script get-git-metadata.sh
+echo "** Execute get-git-metadata.sh **"
 . ./get-git-metadata.sh
 
+# show Terratag version
+echo "** Show Terratag version **"
+./bin/terratag --version
+
 # apply Terratag tags
+echo "** Apply Terratag tags **"
 ./bin/terratag -dir=$directory -tags=$TAGS
