@@ -65,11 +65,11 @@ jobs:
               -backend-config="use_oidc=true"
             
         # Add git metadata to resources using Yor
-        # - name: Run yor action and commit
-        #   uses: bridgecrewio/yor-action@main
-        #   with:
-        #     parsers: Terraform
-        #     commit_changes: false
+        - name: Run yor action and commit
+          uses: bridgecrewio/yor-action@main
+          with:
+            parsers: Terraform
+            commit_changes: false
 
         # Generates an execution plan for Terraform
         # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
