@@ -4,6 +4,6 @@ locals {
   tags = {
     "Environment"  = title(var.environment)
     "DeployedFrom" = title(var.deployed_from)
-    "Tagger"       = "TerraTag"
+    "Tagger"       = "Terratag"
   }
 }
