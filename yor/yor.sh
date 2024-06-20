@@ -13,4 +13,4 @@ echo "** Show folder contents **"
 ls -al
 
 # run Yor
-./yor tag --directory . --parsers Terraform
+./yor tag --directory . --parsers Terraform --tag-groups git
