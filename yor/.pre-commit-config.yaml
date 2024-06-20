@@ -5,7 +5,7 @@ repos:
       - id: yor
         name: yor
         entry: yor tag -d
-        args: ["."]
+        args: ["./yor"]
         language: golang
         types: [terraform]
         pass_filenames: false
