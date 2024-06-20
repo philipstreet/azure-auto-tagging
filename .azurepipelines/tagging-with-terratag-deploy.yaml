@@ -43,7 +43,8 @@ stages:
                 ./terratag.sh
 
           - task: TerraformTaskV4@4
-            displayName: 'Terraform_Validate'
+            name: 'Terraform_Validate'
+            displayName: 'Terraform Validate'
             inputs:
               provider: 'azurerm'
               command: 'validate'   
