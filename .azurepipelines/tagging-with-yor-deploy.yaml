@@ -18,7 +18,8 @@ stages:
             fetchDepth: 0 # Seems to be required for Yor, otherwise "git blame" does not work
 
           - task: TerraformTaskV4@4
-            name: 'terraformInit'
+            name: 'Terraform_Init'
+            displayName: 'Terraform Init'
             inputs:
               provider: 'azurerm'
               command: 'init'
@@ -50,6 +51,7 @@ stages:
 
           - task: TerraformTaskV4@4
             name: 'terraformPlan'
+            displayName: 'Terraform Plan'
             inputs:
               provider: 'azurerm'
               command: 'plan'
@@ -105,6 +107,7 @@ stages:
                 
             - task: TerraformTaskV4@4
               name: 'terraformApply'
+              displayName: 'Terraform Apply'
               inputs:
                 provider: 'azurerm'
                 command: 'apply'
