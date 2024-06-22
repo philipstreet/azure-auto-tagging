@@ -69,7 +69,7 @@ jobs:
           uses: bridgecrewio/yor-action@main
           with:
             parsers: Terraform
-            tag_groups: git
+            #tag_groups: git
             commit_changes: false
 
         # Generates an execution plan for Terraform
