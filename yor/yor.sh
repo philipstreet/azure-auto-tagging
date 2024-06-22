@@ -4,6 +4,10 @@
 echo "** Downloading Yor **"
 curl -s -k https://api.github.com/repos/bridgecrewio/yor/releases/latest | jq '.assets[] | select(.name | contains("linux_386")) | select(.content_type | contains("gzip")) | .browser_download_url' -r | awk '{print "curl -L -k " $0 " -o yor.tar.gz"}' | sh
 
+# creat bin directory
+echo "** Creating bin directory **"
+mkdir -pv bin
+
 # Extract Yor
 echo "** Extracting Yor **"
 tar -xf yor.tar.gz -C bin
@@ -22,4 +26,4 @@ echo "** Display Yor version **"
 
 # run Yor
 echo "** Run Yor **"
-./yor tag --directory . --parsers Terraform --tag-groups git
+./bin/yor tag --directory . --parsers Terraform --tag-groups git
