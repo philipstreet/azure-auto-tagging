@@ -40,6 +40,7 @@ stages:
               workingDirectory: '$(System.DefaultWorkingDirectory)/terratag'
               targetType: 'inline'
               script: |
+                ls -al
                 ./terratag.sh
 
           - task: TerraformTaskV4@4
