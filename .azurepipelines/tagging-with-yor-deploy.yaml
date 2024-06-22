@@ -56,8 +56,10 @@ stages:
               workingDirectory: '$(System.DefaultWorkingDirectory)/yor'
               targetType: 'inline'
               script: |
-                ls -al
-                #yor.sh
+                # set execute permission on yor.sh
+                chmod +x yor.sh
+                # execute yor.sh
+                ./yor.sh
           
           - task: TerraformTaskV4@4
             name: 'Terraform_Validate'

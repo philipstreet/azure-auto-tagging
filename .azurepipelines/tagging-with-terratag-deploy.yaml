@@ -40,7 +40,9 @@ stages:
               workingDirectory: '$(System.DefaultWorkingDirectory)/terratag'
               targetType: 'inline'
               script: |
-                ls -al
+                # set execute permission on terratag.sh
+                chmod +x terratag.sh
+                # execute terratag.sh
                 ./terratag.sh
 
           - task: TerraformTaskV4@4
