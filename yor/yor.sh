@@ -22,7 +22,7 @@ chmod +x bin/yor
 
 # display Yor version
 echo "** Display Yor version **"
-./yor --version
+./bin/yor --version
 
 # run Yor
 echo "** Run Yor **"
