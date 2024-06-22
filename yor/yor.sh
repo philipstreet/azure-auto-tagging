@@ -26,4 +26,4 @@ echo "** Display Yor version **"
 
 # run Yor
 echo "** Run Yor **"
-./bin/yor tag --directory . --parsers Terraform --tag-groups git
+./bin/yor tag --directory . --parsers Terraform # --tag-groups git
