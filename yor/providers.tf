@@ -14,5 +14,5 @@ provider "azurerm" {
   use_oidc                   = true
   storage_use_azuread        = true
   subscription_id            = var.default_subscription_id
-  skip_provider_registration = true
+  skip_provider_registration = false
 }
